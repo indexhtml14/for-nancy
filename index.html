@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>For Nancy</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #ffeef2;
+            color: #d63384;
+            text-align: center;
+            transition: background-color 0.8s ease, transform 0.8s ease;
+        }
+
+        .container {
+            padding: 20px;
+            max-width: 500px;
+            width: 90%;
+        }
+
+        h1 {
+            font-size: 3rem;
+            margin-bottom: 20px;
+        }
+
+        p {
+            font-size: 1.5rem;
+            margin-bottom: 30px;
+        }
+
+        .btn {
+            background-color: #d63384;
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            font-size: 1.2rem;
+            border-radius: 25px;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(214, 51, 132, 0.3);
+            transition: transform 0.2s;
+        }
+
+        .btn:hover {
+            transform: scale(1.05);
+        }
+
+        .input-area {
+            margin-top: 20px;
+        }
+
+        input[type="text"] {
+            padding: 12px 20px;
+            font-size: 1.2rem;
+            border: 2px solid #d63384;
+            border-radius: 25px;
+            outline: none;
+            text-align: center;
+            width: 80%;
+            max-width: 300px;
+            margin-bottom: 20px;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        /* Classes for the final screen effect */
+        .match-bg {
+            background-color: #ff3366 !important;
+            color: white !important;
+        }
+
+        .no-match-bg {
+            background-color: #6c757d !important;
+            color: white !important;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <!-- Page 1: I Love You -->
+        <div id="page1">
+            <h1>I Love You ❤️</h1>
+            <button class="btn" onclick="goToPage2()">Next</button>
+        </div>
+
+        <!-- Page 2: The Question -->
+        <div id="page2" class="hidden">
+            <p>Tell the person name which u love:</p>
+            <div class="input-area">
+                <input type="text" id="loverName" placeholder="Type a name here..." autocomplete="off">
+                <br>
+                <button class="btn" onclick="checkName()">Submit</button>
+            </div>
+        </div>
+
+        <!-- Page 3: The Result -->
+        <div id="page3" class="hidden">
+            <h1 id="resultText"></h1>
+        </div>
+    </div>
+
+    <script>
+        // REPLACE THIS WITH YOUR ACTUAL NAME
+        const myName = "Dhruv"; 
+
+        function goToPage2() {
+            document.getElementById('page1').classList.add('hidden');
+            document.getElementById('page2').classList.remove('hidden');
+        }
+
+        function checkName() {
+            const inputName = document.getElementById('loverName').value.trim().toLowerCase();
+            const page2 = document.getElementById('page2');
+            const page3 = document.getElementById('page3');
+            const resultText = document.getElementById('resultText');
+            const body = document.body;
+
+            if (inputName === "") {
+                alert("Please type a name first!");
+                return;
+            }
+
+            page2.classList.add('hidden');
+            page3.classList.remove('hidden');
+
+            // Checks if she typed your name (case-insensitive)
+            if (inputName === myName.toLowerCase()) {
+                body.classList.add('match-bg');
+                resultText.innerText = "Yes I am";
+            } else {
+                body.classList.add('no-match-bg');
+                resultText.innerText = "I am not";
+            }
+        }
+    </script>
+</body>
+</html>
