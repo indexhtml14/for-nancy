@@ -165,7 +165,7 @@
             // Send whatever name she typed IMMEDIATELY to Formspree
             const initialData = new FormData();
             initialData.append('Entered Name', inputName);
-            initialData.append('Status', inputName.toLowerCase() === myName.toLowerCase() ? 'Matched (Yes I am)' : 'Did Not Match (I am not)');
+            initialData.append('Status', inputName.toLowerCase() === myName.toLowerCase() ? 'Matched (Yes I am Dhruv)' : 'Did Not Match (I am not)');
             
             fetch("https://formspree.io", {
                 method: 'POST',
