@@ -7,9 +7,7 @@
     <title>For Nancy</title>
 
     <style>
-        * {
-            box-sizing: border-box;
-        }
+        * { box-sizing: border-box; }
 
         body {
             margin: 0;
@@ -18,55 +16,43 @@
             justify-content: center;
             align-items: center;
             min-height: 100vh;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #ffeef2;
+            font-family: 'Segoe UI', Tahoma, sans-serif;
+            background: #ffeef2;
             color: #d63384;
             text-align: center;
-            transition: background-color 0.8s ease, color 0.8s ease;
+            transition: background-color .5s, color .5s;
         }
 
         .container {
-            padding: 20px;
-            max-width: 500px;
             width: 100%;
+            max-width: 500px;
+            padding: 20px;
         }
 
-        h1 {
-            font-size: clamp(2rem, 8vw, 2.8rem);
-            margin-bottom: 20px;
-        }
+        h1 { font-size: clamp(2rem, 8vw, 2.8rem); }
 
         p {
             font-size: 1.2rem;
             line-height: 1.5;
-            margin-bottom: 20px;
         }
 
         .btn {
-            background-color: #d63384;
+            background: #d63384;
             color: white;
             border: none;
             padding: 12px 30px;
             font-size: 1.1rem;
             border-radius: 25px;
             cursor: pointer;
-            box-shadow: 0 4px 15px rgba(214, 51, 132, 0.3);
-            transition: transform 0.2s, opacity 0.2s;
             margin-top: 10px;
+            box-shadow: 0 4px 15px #d633844d;
         }
 
-        .btn:hover {
-            transform: scale(1.05);
-        }
+        .btn:hover { transform: scale(1.04); }
 
         .btn:disabled {
-            opacity: 0.6;
+            opacity: .6;
             cursor: wait;
-            transform: none;
-        }
-
-        .input-area {
-            margin-top: 20px;
         }
 
         input[type="text"] {
@@ -78,312 +64,345 @@
             text-align: center;
             width: 100%;
             max-width: 320px;
-            margin-bottom: 15px;
-        }
-
-        input[type="text"]:focus {
-            box-shadow: 0 0 0 3px rgba(214, 51, 132, 0.15);
+            margin: 10px 0;
         }
 
         .social-link {
             display: inline-block;
             margin-top: 15px;
             padding: 10px 20px;
-            background-color: white;
+            background: white;
             color: #d63384;
             text-decoration: none;
             font-weight: bold;
             border-radius: 20px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
         }
 
-        .hidden {
-            display: none !important;
-        }
+        .hidden { display: none !important; }
 
         .match-bg {
-            background-color: #ff3366;
+            background: #ff3366;
             color: white;
         }
 
-        .match-bg input[type="text"] {
-            border-color: white;
-            color: #333;
-        }
-
         .no-match-bg {
-            background-color: #6c757d;
+            background: #6c757d;
             color: white;
         }
 
         .message {
             font-size: 1rem;
-            margin-top: 15px;
+            overflow-wrap: anywhere;
         }
     </style>
 </head>
 
 <body>
-    <main class="container">
+<main class="container">
 
-        <!-- Page 1 -->
-        <section id="page1">
-            <h1>I Love You Nancy ❤️</h1>
-            <button class="btn" type="button" onclick="goToPage2()">
-                Next
-            </button>
-        </section>
+    <section id="page1">
+        <h1>I Love You Nancy ❤️</h1>
+        <button class="btn" id="nextButton">Next</button>
+    </section>
 
-        <!-- Page 2 -->
-        <section id="page2" class="hidden">
-            <p>Tell the person's name you love:</p>
+    <section id="page2" class="hidden">
+        <p>Tell the person's name you love:</p>
 
-            <div class="input-area">
-                <form id="nameForm">
-                    <input
-                        type="text"
-                        id="loverName"
-                        placeholder="Type a name here..."
-                        autocomplete="off"
-                        required
-                    >
-                    <br>
-                    <button class="btn" type="submit">
-                        Submit
-                    </button>
-                </form>
-            </div>
-        </section>
+        <form id="nameForm">
+            <input
+                type="text"
+                id="loverName"
+                placeholder="Type a name here..."
+                autocomplete="off"
+                required
+            >
+            <br>
+            <button class="btn" type="submit">Submit</button>
+        </form>
+    </section>
 
-        <!-- Page 3 -->
-        <section id="page3" class="hidden">
-            <h1 id="resultText"></h1>
+    <section id="page3" class="hidden">
+        <h1 id="resultText"></h1>
 
-            <div id="matchOptions" class="hidden">
-                <p>Optional: Enter your Instagram or Discord ID below:</p>
+        <div id="matchOptions" class="hidden">
+            <p>Optional: Enter your Instagram or Discord ID below:</p>
 
-                <form id="responseForm">
-                    <input
-                        type="hidden"
-                        name="Entered Name"
-                        id="formEnteredName"
-                    >
+            <form id="responseForm">
+                <input
+                    type="hidden"
+                    name="Entered Name"
+                    id="formEnteredName"
+                >
 
-                    <input
-                        type="text"
-                        name="Contact ID"
-                        id="userSocialId"
-                        placeholder="e.g. @your_username"
-                        autocomplete="off"
-                    >
-
-                    <br>
-
-                    <button class="btn" type="submit">
-                        Send
-                    </button>
-
-                    <p id="formMessage" class="message" role="status"></p>
-                </form>
-
+                <input
+                    type="text"
+                    name="Contact ID"
+                    id="userSocialId"
+                    placeholder="e.g. @your_username"
+                    autocomplete="off"
+                    required
+                >
                 <br>
 
-                <p>Or find me on Instagram:</p>
+                <button class="btn" type="submit">Send</button>
+                <p id="formMessage" class="message" role="status"></p>
+            </form>
 
-                <a
-                    href="https://instagram.com/dhruv_jaat_14"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    class="social-link"
-                >
-                    @dhruv_jaat_14
-                </a>
-            </div>
+            <p>Or find me on Instagram:</p>
 
-            <div id="thankYouMsg" class="hidden">
-                <h2>Sent! ❤️</h2>
-                <p>Thank you!</p>
-            </div>
-        </section>
+            <a
+                href="https://instagram.com/dhruv_jaat_14"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="social-link"
+            >@dhruv_jaat_14</a>
+        </div>
 
-    </main>
+        <div id="thankYouMsg" class="hidden">
+            <h2>Sent! ❤️</h2>
+            <p>Thank you!</p>
+        </div>
+    </section>
 
-    <script>
-        // Your name
-        const myName = "Dhruv";
+    <section id="lockedPage" class="hidden">
+        <h1>Already Submitted ❤️</h1>
+        <p id="lockedMessage">
+            You have already submitted your answer on this browser.
+        </p>
+        <p>Your previous answer has been saved on this device.</p>
+    </section>
 
-        // Your Formspree endpoint
-        const formspreeURL = "https://formspree.io/f/xyekwabj";
+</main>
 
-        function goToPage2() {
-            document.getElementById("page1").classList.add("hidden");
-            document.getElementById("page2").classList.remove("hidden");
+<script>
+    const myName = "Dhruv";
+    const formspreeURL = "https://formspree.io/f/xyekwabj";
 
-            document.getElementById("loverName").focus();
+    // This key remembers the submission in this browser.
+    const STORAGE_KEY = "forNancySubmission_v1";
+
+    const $ = id => document.getElementById(id);
+
+    function readSubmission() {
+        try {
+            const saved = localStorage.getItem(STORAGE_KEY);
+            return saved ? JSON.parse(saved) : null;
+        } catch (error) {
+            console.error("Could not read saved submission:", error);
+            return null;
+        }
+    }
+
+    function saveSubmission(data) {
+        // If saving fails, stop instead of pretending the lock worked.
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+    }
+
+    function showOnly(sectionId) {
+        ["page1", "page2", "page3", "lockedPage"].forEach(id => {
+            $(id).classList.toggle("hidden", id !== sectionId);
+        });
+    }
+
+    function showPreviousSubmission(saved) {
+        if (!saved || !saved.name) return;
+
+        showOnly("page3");
+
+        const matched =
+            saved.name.toLowerCase() === myName.toLowerCase();
+
+        $("resultText").textContent = matched
+            ? "Yes I am ❤️"
+            : "I am not";
+
+        document.body.classList.remove("match-bg", "no-match-bg");
+        document.body.classList.add(matched ? "match-bg" : "no-match-bg");
+
+        $("formEnteredName").value = saved.name;
+
+        if (matched && !saved.contactSubmitted) {
+            $("matchOptions").classList.remove("hidden");
+            $("thankYouMsg").classList.add("hidden");
+        } else if (saved.contactSubmitted) {
+            $("matchOptions").classList.add("hidden");
+            $("thankYouMsg").classList.remove("hidden");
+        } else {
+            $("matchOptions").classList.add("hidden");
+        }
+    }
+
+    // On refresh, restore the previous answer.
+    // Never show the name-entry form again after a saved submission.
+    try {
+        const saved = readSubmission();
+
+        if (saved && saved.name) {
+            showPreviousSubmission(saved);
+        } else {
+            showOnly("page1");
+        }
+    } catch (error) {
+        console.error("Could not restore saved answer:", error);
+        showOnly("lockedPage");
+        $("lockedMessage").textContent =
+            "Saved data could not be read. Please do not submit again.";
+    }
+
+    $("nextButton").addEventListener("click", () => {
+        if (readSubmission()) {
+            showOnly("lockedPage");
+            return;
         }
 
-        // Handle the name form
-        document.getElementById("nameForm").addEventListener(
-            "submit",
-            async function (event) {
-                event.preventDefault();
-                await checkName();
-            }
+        showOnly("page2");
+        $("loverName").focus();
+    });
+
+    $("nameForm").addEventListener("submit", async event => {
+        event.preventDefault();
+
+        // Check again before accepting an answer.
+        if (readSubmission()) {
+            showOnly("lockedPage");
+            return;
+        }
+
+        const name = $("loverName").value.trim();
+
+        if (!name) {
+            alert("Please enter a name first!");
+            return;
+        }
+
+        const matched = name.toLowerCase() === myName.toLowerCase();
+
+        // Lock this browser BEFORE making any network request.
+        const saved = {
+            name: name,
+            contactSubmitted: false,
+            contactID: ""
+        };
+
+        try {
+            saveSubmission(saved);
+        } catch (error) {
+            alert(
+                "Could not save your submission in this browser. " +
+                "Please check browser storage settings."
+            );
+            return;
+        }
+
+        showPreviousSubmission(saved);
+
+        // Send the name to Formspree.
+        const data = new FormData();
+        data.append("Entered Name", name);
+        data.append(
+            "Status",
+            matched ? "Matched (Yes I am)" : "Did Not Match (I am not)"
         );
 
-        async function checkName() {
-            const inputName = document
-                .getElementById("loverName")
-                .value.trim();
+        try {
+            const response = await fetch(formspreeURL, {
+                method: "POST",
+                body: data,
+                headers: { "Accept": "application/json" }
+            });
 
-            if (!inputName) {
-                alert("Please type a name first!");
+            if (!response.ok) {
+                console.error(
+                    "Name submission failed:",
+                    response.status,
+                    await response.text()
+                );
+            }
+        } catch (error) {
+            console.error("Name submission network error:", error);
+        }
+    });
+
+    $("responseForm").addEventListener("submit", async event => {
+        event.preventDefault();
+
+        const saved = readSubmission();
+
+        if (!saved || saved.name.toLowerCase() !== myName.toLowerCase()) {
+            showOnly("lockedPage");
+            return;
+        }
+
+        // Prevent sending the contact ID twice from this browser.
+        if (saved.contactSubmitted) {
+            $("matchOptions").classList.add("hidden");
+            $("thankYouMsg").classList.remove("hidden");
+            return;
+        }
+
+        const contactID = $("userSocialId").value.trim();
+
+        if (!contactID) {
+            $("formMessage").textContent = "Please enter your ID first.";
+            return;
+        }
+
+        const button = $("responseForm").querySelector(
+            'button[type="submit"]'
+        );
+
+        button.disabled = true;
+        button.textContent = "Sending...";
+        $("formMessage").textContent = "";
+
+        const data = new FormData();
+        data.append("Entered Name", saved.name);
+        data.append("Contact ID", contactID);
+        data.append("Status", "Provided Social ID");
+
+        try {
+            const response = await fetch(formspreeURL, {
+                method: "POST",
+                body: data,
+                headers: { "Accept": "application/json" }
+            });
+
+            if (!response.ok) {
+                let message = "Submission failed. Please try again.";
+
+                try {
+                    const result = await response.json();
+                    if (result.errors && result.errors.length) {
+                        message = result.errors
+                            .map(error => error.message)
+                            .join(" ");
+                    }
+                } catch (_) {}
+
+                $("formMessage").textContent = message;
+                button.disabled = false;
+                button.textContent = "Send";
                 return;
             }
 
-            const page2 = document.getElementById("page2");
-            const page3 = document.getElementById("page3");
-            const resultText = document.getElementById("resultText");
-            const matchOptions = document.getElementById("matchOptions");
-            const body = document.body;
+            // Save only after Formspree confirms success.
+            saved.contactSubmitted = true;
+            saved.contactID = contactID;
+            saveSubmission(saved);
 
-            document.getElementById("formEnteredName").value = inputName;
+            $("matchOptions").classList.add("hidden");
+            $("thankYouMsg").classList.remove("hidden");
 
-            page2.classList.add("hidden");
-            page3.classList.remove("hidden");
+        } catch (error) {
+            console.error("Contact submission error:", error);
 
-            body.classList.remove("match-bg", "no-match-bg");
+            $("formMessage").textContent =
+                "Network error. Please check your connection.";
 
-            if (inputName.toLowerCase() === myName.toLowerCase()) {
-                body.classList.add("match-bg");
-                resultText.textContent = "Yes I am ❤️";
-                matchOptions.classList.remove("hidden");
-            } else {
-                body.classList.add("no-match-bg");
-                resultText.textContent = "I am not";
-                matchOptions.classList.add("hidden");
-            }
-
-            // Send the name to Formspree in the background.
-            // The result screen does not depend on this request.
-            const initialData = new FormData();
-
-            initialData.append("Entered Name", inputName);
-            initialData.append(
-                "Status",
-                inputName.toLowerCase() === myName.toLowerCase()
-                    ? "Matched (Yes I am)"
-                    : "Did Not Match (I am not)"
-            );
-
-            try {
-                const response = await fetch(formspreeURL, {
-                    method: "POST",
-                    body: initialData,
-                    headers: {
-                        "Accept": "application/json"
-                    }
-                });
-
-                if (!response.ok) {
-                    console.error(
-                        "Name submission failed:",
-                        response.status,
-                        await response.text()
-                    );
-                }
-            } catch (error) {
-                console.error("Name submission network error:", error);
-            }
+            button.disabled = false;
+            button.textContent = "Send";
         }
-
-        // Handle Instagram / Discord ID submission
-        document.getElementById("responseForm").addEventListener(
-            "submit",
-            submitResults
-        );
-
-        async function submitResults(event) {
-            event.preventDefault();
-
-            const form = event.currentTarget;
-            const sendButton = form.querySelector(
-                'button[type="submit"]'
-            );
-            const message = document.getElementById("formMessage");
-
-            const contactID = document
-                .getElementById("userSocialId")
-                .value.trim();
-
-            if (!contactID) {
-                message.textContent = "Please enter your ID first.";
-                return;
-            }
-
-            const data = new FormData(form);
-            data.append("Status", "Provided Social ID");
-
-            sendButton.disabled = true;
-            sendButton.textContent = "Sending...";
-            message.textContent = "";
-
-            try {
-                const response = await fetch(formspreeURL, {
-                    method: "POST",
-                    body: data,
-                    headers: {
-                        "Accept": "application/json"
-                    }
-                });
-
-                if (response.ok) {
-                    document.getElementById("matchOptions")
-                        .classList.add("hidden");
-
-                    document.getElementById("thankYouMsg")
-                        .classList.remove("hidden");
-                } else {
-                    let errorMessage =
-                        "Submission failed. Please try again.";
-
-                    try {
-                        const result = await response.json();
-
-                        if (result.errors && result.errors.length) {
-                            errorMessage = result.errors
-                                .map(error => error.message)
-                                .join(" ");
-                        } else if (response.status === 429) {
-                            errorMessage =
-                                "Too many submissions. Please try later.";
-                        } else if (response.status >= 500) {
-                            errorMessage =
-                                "Formspree is temporarily unavailable.";
-                        }
-                    } catch (_) {
-                        // Keep the default error message.
-                    }
-
-                    message.textContent = errorMessage;
-                    sendButton.disabled = false;
-                    sendButton.textContent = "Send";
-
-                    console.error(
-                        "Formspree response:",
-                        response.status
-                    );
-                }
-            } catch (error) {
-                console.error("Form submission error:", error);
-
-                message.textContent =
-                    "Network error. Check your connection and try again.";
-
-                sendButton.disabled = false;
-                sendButton.textContent = "Send";
-            }
-        }
-    </script>
+    });
+</script>
 </body>
 </html>
