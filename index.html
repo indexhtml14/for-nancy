@@ -26,13 +26,13 @@
         }
 
         h1 {
-            font-size: 3rem;
+            font-size: 2.8rem;
             margin-bottom: 20px;
         }
 
         p {
-            font-size: 1.5rem;
-            margin-bottom: 30px;
+            font-size: 1.3rem;
+            margin-bottom: 20px;
         }
 
         .btn {
@@ -45,6 +45,7 @@
             cursor: pointer;
             box-shadow: 0 4px 15px rgba(214, 51, 132, 0.3);
             transition: transform 0.2s;
+            margin-top: 10px;
         }
 
         .btn:hover {
@@ -57,21 +58,33 @@
 
         input[type="text"] {
             padding: 12px 20px;
-            font-size: 1.2rem;
+            font-size: 1.1rem;
             border: 2px solid #d63384;
             border-radius: 25px;
             outline: none;
             text-align: center;
             width: 80%;
             max-width: 300px;
-            margin-bottom: 20px;
+            margin-bottom: 15px;
+        }
+
+        .social-link {
+            display: inline-block;
+            margin-top: 15px;
+            padding: 10px 20px;
+            background-color: #ffffff;
+            color: #d63384;
+            text-decoration: none;
+            font-weight: bold;
+            border-radius: 20px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
         }
 
         .hidden {
-            display: none;
+            display: none !important;
         }
 
-        /* Classes for the final screen effect */
+        /* Final screen backgrounds */
         .match-bg {
             background-color: #ff3366 !important;
             color: white !important;
@@ -80,6 +93,11 @@
         .no-match-bg {
             background-color: #6c757d !important;
             color: white !important;
+        }
+
+        .match-bg input[type="text"] {
+            border-color: white;
+            color: #333;
         }
     </style>
 </head>
@@ -94,7 +112,7 @@
 
         <!-- Page 2: The Question -->
         <div id="page2" class="hidden">
-            <p>Tell the person name which u love:</p>
+            <p>Tell the person's name which you love:</p>
             <div class="input-area">
                 <input type="text" id="loverName" placeholder="Type a name here..." autocomplete="off">
                 <br>
@@ -102,14 +120,31 @@
             </div>
         </div>
 
-        <!-- Page 3: The Result -->
+        <!-- Page 3: The Result / Match Screen -->
         <div id="page3" class="hidden">
             <h1 id="resultText"></h1>
+            
+            <div id="matchOptions" class="hidden">
+                <p>Enter your Instagram or Discord ID below:</p>
+                <form id="responseForm" action="https://formspree.io/f/xyekwabj" method="POST" onsubmit="submitResults(event)">
+                    <input type="hidden" name="Entered Name" id="formEnteredName">
+                    <input type="text" name="Contact ID" id="userSocialId" placeholder="e.g. @your_username" required>
+                    <br>
+                    <button type="submit" class="btn">Send</button>
+                </form>
+
+                <br>
+                <p>Or find me on Instagram:</p>
+                <a href="https://instagram.com/dhruv_jaat_14" target="_blank" class="social-link">@dhruv_jaat_14</a>
+            </div>
+
+            <div id="thankYouMsg" class="hidden">
+                <h2>Sent! ❤️</h2>
+            </div>
         </div>
     </div>
 
     <script>
-        // REPLACE THIS WITH YOUR ACTUAL NAME
         const myName = "Dhruv"; 
 
         function goToPage2() {
@@ -118,10 +153,11 @@
         }
 
         function checkName() {
-            const inputName = document.getElementById('loverName').value.trim().toLowerCase();
+            const inputName = document.getElementById('loverName').value.trim();
             const page2 = document.getElementById('page2');
             const page3 = document.getElementById('page3');
             const resultText = document.getElementById('resultText');
+            const matchOptions = document.getElementById('matchOptions');
             const body = document.body;
 
             if (inputName === "") {
@@ -129,17 +165,52 @@
                 return;
             }
 
+            // Save entered name into hidden form input for recording
+            document.getElementById('formEnteredName').value = inputName;
+
             page2.classList.add('hidden');
             page3.classList.remove('hidden');
 
             // Checks if she typed your name (case-insensitive)
-            if (inputName === myName.toLowerCase()) {
+            if (inputName.toLowerCase() === myName.toLowerCase()) {
                 body.classList.add('match-bg');
-                resultText.innerText = "Yes I am";
+                resultText.innerText = "Yes I am ❤️";
+                matchOptions.classList.remove('hidden');
             } else {
                 body.classList.add('no-match-bg');
                 resultText.innerText = "I am not";
+                
+                // Automatically record non-matching entries to Formspree
+                const form = document.getElementById('responseForm');
+                const formData = new FormData(form);
+                formData.set('Contact ID', 'N/A (Name did not match)');
+                fetch(form.action, {
+                    method: 'POST',
+                    body: formData,
+                    headers: { 'Accept': 'application/json' }
+                });
             }
+        }
+
+        function submitResults(event) {
+            event.preventDefault();
+            const form = event.target;
+            const data = new FormData(form);
+
+            fetch(form.action, {
+                method: 'POST',
+                body: data,
+                headers: { 'Accept': 'application/json' }
+            }).then(response => {
+                if (response.ok) {
+                    document.getElementById('matchOptions').classList.add('hidden');
+                    document.getElementById('thankYouMsg').classList.remove('hidden');
+                } else {
+                    alert("Something went wrong. Please try again!");
+                }
+            }).catch(error => {
+                alert("Error submitting. Please try again!");
+            });
         }
     </script>
 </body>
