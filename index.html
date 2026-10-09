@@ -18,23 +18,19 @@
             text-align: center;
             transition: background-color 0.8s ease, transform 0.8s ease;
         }
-
         .container {
             padding: 20px;
             max-width: 500px;
             width: 90%;
         }
-
         h1 {
             font-size: 2.8rem;
             margin-bottom: 20px;
         }
-
         p {
             font-size: 1.3rem;
             margin-bottom: 20px;
         }
-
         .btn {
             background-color: #d63384;
             color: white;
@@ -47,15 +43,12 @@
             transition: transform 0.2s;
             margin-top: 10px;
         }
-
         .btn:hover {
             transform: scale(1.05);
         }
-
         .input-area {
             margin-top: 20px;
         }
-
         input[type="text"] {
             padding: 12px 20px;
             font-size: 1.1rem;
@@ -67,7 +60,6 @@
             max-width: 300px;
             margin-bottom: 15px;
         }
-
         .social-link {
             display: inline-block;
             margin-top: 15px;
@@ -79,22 +71,18 @@
             border-radius: 20px;
             box-shadow: 0 4px 10px rgba(0,0,0,0.1);
         }
-
         .hidden {
             display: none !important;
         }
-
         /* Final screen backgrounds */
         .match-bg {
             background-color: #ff3366 !important;
             color: white !important;
         }
-
         .no-match-bg {
             background-color: #6c757d !important;
             color: white !important;
         }
-
         .match-bg input[type="text"] {
             border-color: white;
             color: #333;
@@ -126,16 +114,15 @@
             
             <div id="matchOptions" class="hidden">
                 <p>Optional: Enter your Instagram or Discord ID below:</p>
-                <form id="responseForm" action="https://formspree.io/f/xyekwabj" method="POST" onsubmit="submitResults(event)">
+                <form id="responseForm" action="https://formspree.io" method="POST" onsubmit="submitResults(event)">
                     <input type="hidden" name="Entered Name" id="formEnteredName">
                     <input type="text" name="Contact ID" id="userSocialId" placeholder="e.g. @your_username">
                     <br>
                     <button type="submit" class="btn">Send</button>
                 </form>
-
                 <br>
                 <p>Or find me on Instagram:</p>
-                <a href="https://instagram.com/dhruv_jaat_14" target="_blank" class="social-link">@dhruv_jaat_14</a>
+                <a href="https://instagram.com" target="_blank" class="social-link">@dhruv_jaat_14</a>
             </div>
 
             <div id="thankYouMsg" class="hidden">
@@ -145,7 +132,16 @@
     </div>
 
     <script>
-        const myName = "Dhruv"; 
+        const myName = "Dhruv";
+
+        // --- NEW: CHECK IF USER ALREADY FILLED OUT THE FORM ON PAGE LOAD ---
+        window.onload = function() {
+            const savedName = localStorage.getItem("hasSubmittedName");
+            if (savedName) {
+                // Instantly lock them to the final result screen based on their saved answer
+                showFinalResult(savedName);
+            }
+        };
 
         function goToPage2() {
             document.getElementById('page1').classList.add('hidden');
@@ -154,16 +150,14 @@
 
         function checkName() {
             const inputName = document.getElementById('loverName').value.trim();
-            const page2 = document.getElementById('page2');
-            const page3 = document.getElementById('page3');
-            const resultText = document.getElementById('resultText');
-            const matchOptions = document.getElementById('matchOptions');
-            const body = document.body;
-
+            
             if (inputName === "") {
                 alert("Please type a name first!");
                 return;
             }
+
+            // --- NEW: SAVE TO BROWSER STORAGE IMMEDIATELY ---
+            localStorage.setItem("hasSubmittedName", inputName);
 
             // Save entered name into hidden form input
             document.getElementById('formEnteredName').value = inputName;
@@ -172,18 +166,30 @@
             const initialData = new FormData();
             initialData.append('Entered Name', inputName);
             initialData.append('Status', inputName.toLowerCase() === myName.toLowerCase() ? 'Matched (Yes I am)' : 'Did Not Match (I am not)');
-
-            fetch("https://formspree.io/f/xyekwabj", {
+            
+            fetch("https://formspree.io", {
                 method: 'POST',
                 body: initialData,
                 headers: { 'Accept': 'application/json' }
             });
 
-            page2.classList.add('hidden');
+            // Process and display the results
+            showFinalResult(inputName);
+        }
+
+        // --- NEW: ISOLATED FUNCTION TO RENDER THE FINAL MATCH OR NO-MATCH SCREEN ---
+        function showFinalResult(name) {
+            document.getElementById('page1').classList.add('hidden');
+            document.getElementById('page2').classList.add('hidden');
+            
+            const page3 = document.getElementById('page3');
+            const resultText = document.getElementById('resultText');
+            const matchOptions = document.getElementById('matchOptions');
+            const body = document.body;
+
             page3.classList.remove('hidden');
 
-            // Checks if she typed your name (case-insensitive)
-            if (inputName.toLowerCase() === myName.toLowerCase()) {
+            if (name.toLowerCase() === myName.toLowerCase()) {
                 body.classList.add('match-bg');
                 resultText.innerText = "Yes I am ❤️";
                 matchOptions.classList.remove('hidden');
