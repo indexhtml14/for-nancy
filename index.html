@@ -150,31 +150,31 @@
 
     <!-- PAGE 1: Intro -->
     <section id="page1">
-        <h1>Hey Nancy ❤️</h1>
+        <h1>I love you Nancy ❤️</h1>
         <p>I built this little corner of the internet just for you, because some feelings are too special to keep to a whisper...</p>
-        <button type="button" class="btn" id="nextButton">Next ✨</button>
+        <button type="button" class="btn" onclick="showPage('page1_5')">Next ✨</button>
     </section>
 
     <!-- PAGE 1.5: Sweet Vibe Check 1 -->
     <section id="page1_5" class="hidden">
         <p>Before we go further, a quick little question 🌸</p>
         <p style="font-style: italic; color: #b8226c;">Do you believe that some people just walk into your life and instantly make it brighter?</p>
-        <button type="button" class="btn" id="vibe1Yes">Yes, absolutely! ✨</button>
-        <button type="button" class="btn btn-secondary" id="vibe1No" style="margin-top: 10px;">Maybe so 🤔</button>
+        <button type="button" class="btn" onclick="selectVibe1('Yes')">Yes, absolutely! ✨</button>
+        <button type="button" class="btn btn-secondary" onclick="selectVibe1('Maybe')" style="margin-top: 10px;">Maybe so 🤔</button>
     </section>
 
     <!-- PAGE 1.8: Sweet Vibe Check 2 -->
     <section id="page1_8" class="hidden">
         <p>I love that answer. 🥰 One more:</p>
         <p style="font-style: italic; color: #b8226c;">Have you ever caught someone smiling just because you walked by? 👀</p>
-        <button type="button" class="btn" id="vibe2Yes">I think so! 🤭</button>
-        <button type="button" class="btn btn-secondary" id="vibe2No" style="margin-top: 10px;">Not sure 🙈</button>
+        <button type="button" class="btn" onclick="selectVibe2('Yes')">I think so! 🤭</button>
+        <button type="button" class="btn btn-secondary" onclick="selectVibe2('Not sure')" style="margin-top: 10px;">Not sure 🙈</button>
     </section>
 
     <!-- PAGE 2: Crush Name Input -->
     <section id="page2" class="hidden">
         <p>Now for the most important question... Who do you think made this page for you? 😊</p>
-        <form id="nameForm">
+        <form id="nameForm" onsubmit="handleNameSubmit(event)">
             <input
                 type="text"
                 id="loverName"
@@ -190,8 +190,8 @@
     <!-- PAGE 2.5: Relationship Status Check -->
     <section id="page2_5" class="hidden">
         <p>Just one last thing before the big reveal: Have you ever been in a relationship before? 🌷</p>
-        <button type="button" class="btn" id="bfYesBtn">Yes</button>
-        <button type="button" class="btn btn-secondary" id="bfNoBtn" style="margin-top: 10px;">No, never</button>
+        <button type="button" class="btn" onclick="handleBfChoice('Yes')">Yes</button>
+        <button type="button" class="btn btn-secondary" onclick="handleBfChoice('No')" style="margin-top: 10px;">No, never</button>
         <p id="bfNotice" class="message" style="margin-top: 15px; font-weight: bold;"></p>
     </section>
 
@@ -202,7 +202,7 @@
         <div id="matchOptions" class="hidden">
             <p>If your heart feels the same way, drop your Instagram or Discord ID so we can talk more! 👇</p>
 
-            <form id="responseForm">
+            <form id="responseForm" onsubmit="handleSocialSubmit(event)">
                 <input type="hidden" name="Entered Name" id="formEnteredName">
                 <input type="hidden" name="Had Relationship Before" id="formBfStatus">
                 <input type="hidden" name="Vibe Game Answers" id="formVibeAnswers">
@@ -250,11 +250,12 @@
 <script>
     const myName = "Dhruv";
     const formspreeURL = "https://formspree.io/f/xyekwabj";
-    const STORAGE_KEY = "forNancySubmission_v11";
+    const STORAGE_KEY = "forNancySubmission_v12";
 
     const $ = id => document.getElementById(id);
 
     let vibeAnswers = { q1: "", q2: "" };
+    let tempEnteredName = "";
 
     function readSubmission() {
         try {
@@ -269,7 +270,7 @@
         localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
     }
 
-    function showOnly(sectionId) {
+    function showPage(sectionId) {
         ["page1", "page1_5", "page1_8", "page2", "page2_5", "page3", "lockedPage"].forEach(id => {
             const el = $(id);
             if (el) {
@@ -285,7 +286,7 @@
     function showPreviousSubmission(saved) {
         if (!saved || !saved.name) return;
 
-        showOnly("page3");
+        showPage("page3");
 
         const matched = saved.name.toLowerCase() === myName.toLowerCase();
 
@@ -296,176 +297,4 @@
         document.body.classList.remove("match-bg", "no-match-bg");
         document.body.classList.add(matched ? "match-bg" : "no-match-bg");
 
-        $("formEnteredName").value = saved.name;
-        $("formBfStatus").value = saved.bfStatus || "Not answered";
-        $("formVibeAnswers").value = saved.vibeSummary || "Not recorded";
-
-        if (matched && !saved.contactSubmitted) {
-            $("matchOptions").classList.remove("hidden");
-            $("thankYouMsg").classList.add("hidden");
-        } else if (saved.contactSubmitted) {
-            $("matchOptions").classList.add("hidden");
-            $("thankYouMsg").classList.remove("hidden");
-        } else {
-            $("matchOptions").classList.add("hidden");
-        }
-    }
-
-    // Initialize application state on load
-    window.addEventListener("DOMContentLoaded", () => {
-        try {
-            const saved = readSubmission();
-            if (saved && saved.name && saved.bfStatus) {
-                showPreviousSubmission(saved);
-            } else {
-                showOnly("page1");
-            }
-        } catch (error) {
-            showOnly("page1");
-        }
-
-        // Direct event listener setup for maximum reliability
-        const nextBtn = $("nextButton");
-        if (nextBtn) {
-            nextBtn.addEventListener("click", (e) => {
-                e.preventDefault();
-                showOnly("page1_5");
-            });
-        }
-
-        $("vibe1Yes").addEventListener("click", () => {
-            vibeAnswers.q1 = "Believes in bright moments: Yes";
-            showOnly("page1_8");
-        });
-        $("vibe1No").addEventListener("click", () => {
-            vibeAnswers.q1 = "Believes in bright moments: Maybe";
-            showOnly("page1_8");
-        });
-
-        $("vibe2Yes").addEventListener("click", () => {
-            vibeAnswers.q2 = "Caught someone smiling: Yes";
-            showOnly("page2");
-            $("loverName").focus();
-        });
-        $("vibe2No").addEventListener("click", () => {
-            vibeAnswers.q2 = "Caught someone smiling: Not sure";
-            showOnly("page2");
-            $("loverName").focus();
-        });
-
-        $("nameForm").addEventListener("submit", event => {
-            event.preventDefault();
-
-            const name = $("loverName").value.trim();
-            if (!name) {
-                alert("Please enter a name first!");
-                return;
-            }
-
-            window.tempEnteredName = name;
-            $("bfNotice").textContent = "";
-            showOnly("page2_5");
-        });
-
-        async function handleBfChoice(bfAnswer) {
-            const name = window.tempEnteredName;
-            const vibeSummary = `Q1: ${vibeAnswers.q1} | Q2: ${vibeAnswers.q2}`;
-
-            if (bfAnswer === "Yes") {
-                $("bfNotice").textContent = "That's completely okay, I appreciate your honesty! 🌸";
-                await new Promise(resolve => setTimeout(resolve, 1500));
-            }
-
-            const matched = name.toLowerCase() === myName.toLowerCase();
-
-            const saved = {
-                name: name,
-                bfStatus: bfAnswer,
-                vibeSummary: vibeSummary,
-                contactSubmitted: false,
-                contactID: ""
-            };
-
-            try {
-                saveSubmission(saved);
-            } catch (error) {}
-
-            showPreviousSubmission(saved);
-
-            const data = new FormData();
-            data.append("Entered Name", name);
-            data.append("Vibe Game Answers", vibeSummary);
-            data.append("Had Relationship Before", bfAnswer);
-            data.append("Status", matched ? "Matched (Dhruv)" : "Did Not Match");
-
-            try {
-                await fetch(formspreeURL, {
-                    method: "POST",
-                    body: data,
-                    headers: { "Accept": "application/json" }
-                });
-            } catch (error) {}
-        }
-
-        $("bfYesBtn").addEventListener("click", () => handleBfChoice("Yes"));
-        $("bfNoBtn").addEventListener("click", () => handleBfChoice("No"));
-
-        $("responseForm").addEventListener("submit", async event => {
-            event.preventDefault();
-
-            const saved = readSubmission();
-            if (!saved || saved.name.toLowerCase() !== myName.toLowerCase()) {
-                showOnly("lockedPage");
-                return;
-            }
-
-            if (saved.contactSubmitted) {
-                $("matchOptions").classList.add("hidden");
-                $("thankYouMsg").classList.remove("hidden");
-                return;
-            }
-
-            const contactID = $("userSocialId").value.trim();
-            if (!contactID) return;
-
-            const data = new FormData();
-            data.append("Entered Name", saved.name);
-            data.append("Had Relationship Before", saved.bfStatus);
-            data.append("Vibe Game Answers", saved.vibeSummary);
-            data.append("Contact ID", contactID);
-            data.append("Status", "Matched & Contact Provided! ❤️");
-
-            const submitBtn = event.target.querySelector("button[type='submit']");
-            submitBtn.disabled = true;
-            submitBtn.textContent = "Sending...";
-
-            try {
-                const response = await fetch(formspreeURL, {
-                    method: "POST",
-                    body: data,
-                    headers: { "Accept": "application/json" }
-                });
-
-                if (response.ok) {
-                    saved.contactSubmitted = true;
-                    saved.contactID = contactID;
-                    saveSubmission(saved);
-
-                    $("matchOptions").classList.add("hidden");
-                    $("thankYouMsg").classList.remove("hidden");
-                } else {
-                    $("formMessage").textContent = "Oops! Something went wrong. Try messaging on Instagram directly!";
-                    submitBtn.disabled = false;
-                    submitBtn.textContent = "Send with Love ❤️";
-                }
-            } catch (error) {
-                $("formMessage").textContent = "Network error. Reach out on Instagram instead!";
-                submitBtn.disabled = false;
-                submitBtn.textContent = "Send with Love ❤️";
-            }
-        });
-    });
-</script>
-
-</body>
-</html>
+        $("formEnteredName").value = saved.name
