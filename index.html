@@ -86,13 +86,6 @@
 
         .btn:hover { background: #b8226c; transform: scale(1.03); }
 
-        .btn-secondary {
-            background: #f8bbd0;
-            color: #b8226c;
-            box-shadow: 0 4px 15px rgba(248, 187, 208, 0.4);
-        }
-        .btn-secondary:hover { background: #f48fb1; }
-
         input[type="text"] {
             padding: 12px 20px;
             font-size: 1rem;
@@ -151,20 +144,12 @@
     <!-- PAGE 1: Intro -->
     <section id="page1">
         <h1>I love you Nancy ❤️</h1>
-        <button type="button" class="btn" onclick="showPage('page1_5')">Next ✨</button>
-    </section>
-
-    <!-- PAGE 1.5: Cute Fun Question -->
-    <section id="page1_5" class="hidden">
-        <p>A quick fun question first! 🎒✨</p>
-        <p style="font-style: italic; color: #b8226c;">Do you like chocolates and sweet treats? 🍫</p>
-        <button type="button" class="btn" onclick="selectVibe('Yes, I love them!')">Yes, absolutely! 😋</button>
-        <button type="button" class="btn btn-secondary" onclick="selectVibe('Not really')" style="margin-top: 10px;">Not really 🤔</button>
+        <button type="button" class="btn" onclick="showPage('page2')">Next ✨</button>
     </section>
 
     <!-- PAGE 2: Crush Name Input -->
     <section id="page2" class="hidden">
-        <p>Now for the fun part... Who do you think made this little site for you? 😊</p>
+        <p>Who do you think made this little site for you? 😊</p>
         <form id="nameForm" onsubmit="handleNameSubmit(event)">
             <input
                 type="text"
@@ -183,11 +168,10 @@
         <h1 id="resultText"></h1>
 
         <div id="matchOptions" class="hidden">
-            <p>If you want to be my girlfriend and talk more, drop your Instagram or Discord ID below! 👇</p>
+            <p>Will you be my girlfriend? Drop your Instagram or Discord ID below so we can talk more! 👇</p>
 
             <form id="responseForm" onsubmit="handleSocialSubmit(event)">
                 <input type="hidden" name="Entered Name" id="formEnteredName">
-                <input type="hidden" name="Fun Answer" id="formVibeAnswers">
 
                 <input
                     type="text"
@@ -222,7 +206,7 @@
     <section id="lockedPage" class="hidden">
         <h1>Already Replied ❤️</h1>
         <p>You have already submitted your answer from this browser.</p>
-        <p>Hope you have an awesome day at school!</p>
+        <p>Hope you have an awesome day!</p>
     </section>
 
 </main>
@@ -230,11 +214,10 @@
 <script>
     const myName = "Dhruv";
     const formspreeURL = "https://formspree.io/f/xyekwabj";
-    const STORAGE_KEY = "nancySubmissionLock_v2";
+    const STORAGE_KEY = "nancySubmissionLock_v3";
 
     const $ = id => document.getElementById(id);
 
-    let vibeAnswer = "";
     let tempEnteredName = "";
 
     // Check on load if she already submitted before
@@ -252,7 +235,7 @@
     });
 
     function showPage(sectionId) {
-        ["page1", "page1_5", "page2", "page3", "lockedPage"].forEach(id => {
+        ["page1", "page2", "page3", "lockedPage"].forEach(id => {
             const el = $(id);
             if (el) {
                 if (id === sectionId) {
@@ -262,15 +245,6 @@
                 }
             }
         });
-    }
-
-    function selectVibe(ans) {
-        vibeAnswer = ans;
-        showPage("page2");
-        setTimeout(() => {
-            const nameInput = $("loverName");
-            if (nameInput) nameInput.focus();
-        }, 100);
     }
 
     async function handleNameSubmit(event) {
@@ -293,7 +267,6 @@
         document.body.classList.add(matched ? "match-bg" : "no-match-bg");
 
         $("formEnteredName").value = name;
-        $("formVibeAnswers").value = vibeAnswer;
 
         if (matched) {
             $("matchOptions").classList.remove("hidden");
@@ -310,7 +283,6 @@
 
         const data = new FormData();
         data.append("Entered Name", name);
-        data.append("Fun Answer", vibeAnswer);
         data.append("Status", matched ? "Matched (Dhruv)" : "Did Not Match");
 
         try {
@@ -330,7 +302,6 @@
 
         const data = new FormData();
         data.append("Entered Name", tempEnteredName);
-        data.append("Fun Answer", vibeAnswer);
         data.append("Contact ID", contactID);
         data.append("Status", "Matched & Contact Provided! ❤️");
 
