@@ -154,25 +154,17 @@
         <button type="button" class="btn" onclick="showPage('page1_5')">Next ✨</button>
     </section>
 
-    <!-- PAGE 1.5: Sweet Vibe Check 1 -->
+    <!-- PAGE 1.5: Cute Fun Question -->
     <section id="page1_5" class="hidden">
-        <p>Before we go further, a quick little question 🌸</p>
-        <p style="font-style: italic; color: #b8226c;">Do you believe that some people just walk into your life and instantly make it brighter?</p>
-        <button type="button" class="btn" onclick="selectVibe1('Yes')">Yes, absolutely! ✨</button>
-        <button type="button" class="btn btn-secondary" onclick="selectVibe1('Maybe')" style="margin-top: 10px;">Maybe so 🤔</button>
-    </section>
-
-    <!-- PAGE 1.8: Sweet Vibe Check 2 -->
-    <section id="page1_8" class="hidden">
-        <p>I love that answer. 🥰 One more:</p>
-        <p style="font-style: italic; color: #b8226c;">Have you ever caught someone smiling just because you walked by? 👀</p>
-        <button type="button" class="btn" onclick="selectVibe2('Yes')">I think so! 🤭</button>
-        <button type="button" class="btn btn-secondary" onclick="selectVibe2('Not sure')" style="margin-top: 10px;">Not sure 🙈</button>
+        <p>A quick fun question first! 🎒✨</p>
+        <p style="font-style: italic; color: #b8226c;">Do you like chocolates and sweet treats? 🍫</p>
+        <button type="button" class="btn" onclick="selectVibe('Yes, I love them!')">Yes, absolutely! 😋</button>
+        <button type="button" class="btn btn-secondary" onclick="selectVibe('Not really')" style="margin-top: 10px;">Not really 🤔</button>
     </section>
 
     <!-- PAGE 2: Crush Name Input -->
     <section id="page2" class="hidden">
-        <p>Now for the most important question... Who do you think made this page for you? 😊</p>
+        <p>Now for the fun part... Who do you think made this little site for you? 😊</p>
         <form id="nameForm" onsubmit="handleNameSubmit(event)">
             <input
                 type="text"
@@ -186,25 +178,16 @@
         </form>
     </section>
 
-    <!-- PAGE 2.5: Relationship Status Check -->
-    <section id="page2_5" class="hidden">
-        <p>Just one last thing before the big reveal: Have you ever been in a relationship before? 🌷</p>
-        <button type="button" class="btn" onclick="handleBfChoice('Yes')">Yes</button>
-        <button type="button" class="btn btn-secondary" onclick="handleBfChoice('No')" style="margin-top: 10px;">No, never</button>
-        <p id="bfNotice" class="message" style="margin-top: 15px; font-weight: bold;"></p>
-    </section>
-
     <!-- PAGE 3: Result & Social Drop -->
     <section id="page3" class="hidden">
         <h1 id="resultText"></h1>
 
         <div id="matchOptions" class="hidden">
-            <p>If your heart feels the same way, drop your Instagram or Discord ID so we can talk more! 👇</p>
+            <p>If you want to be my girlfriend and talk more, drop your Instagram or Discord ID below! 👇</p>
 
             <form id="responseForm" onsubmit="handleSocialSubmit(event)">
                 <input type="hidden" name="Entered Name" id="formEnteredName">
-                <input type="hidden" name="Had Relationship Before" id="formBfStatus">
-                <input type="hidden" name="Vibe Game Answers" id="formVibeAnswers">
+                <input type="hidden" name="Fun Answer" id="formVibeAnswers">
 
                 <input
                     type="text"
@@ -239,7 +222,7 @@
     <section id="lockedPage" class="hidden">
         <h1>Already Replied ❤️</h1>
         <p>You have already submitted your answer from this browser.</p>
-        <p>Hope you have an amazing day ahead!</p>
+        <p>Hope you have an awesome day at school!</p>
     </section>
 
 </main>
@@ -247,11 +230,11 @@
 <script>
     const myName = "Dhruv";
     const formspreeURL = "https://formspree.io/f/xyekwabj";
-    const STORAGE_KEY = "nancySubmissionLock_v1";
+    const STORAGE_KEY = "nancySubmissionLock_v2";
 
     const $ = id => document.getElementById(id);
 
-    let vibeAnswers = { q1: "", q2: "" };
+    let vibeAnswer = "";
     let tempEnteredName = "";
 
     // Check on load if she already submitted before
@@ -269,7 +252,7 @@
     });
 
     function showPage(sectionId) {
-        ["page1", "page1_5", "page1_8", "page2", "page2_5", "page3", "lockedPage"].forEach(id => {
+        ["page1", "page1_5", "page2", "page3", "lockedPage"].forEach(id => {
             const el = $(id);
             if (el) {
                 if (id === sectionId) {
@@ -281,13 +264,8 @@
         });
     }
 
-    function selectVibe1(ans) {
-        vibeAnswers.q1 = "Believes in bright moments: " + ans;
-        showPage("page1_8");
-    }
-
-    function selectVibe2(ans) {
-        vibeAnswers.q2 = "Caught someone smiling: " + ans;
+    function selectVibe(ans) {
+        vibeAnswer = ans;
         showPage("page2");
         setTimeout(() => {
             const nameInput = $("loverName");
@@ -295,7 +273,7 @@
         }, 100);
     }
 
-    function handleNameSubmit(event) {
+    async function handleNameSubmit(event) {
         event.preventDefault();
         const name = $("loverName").value.trim();
         if (!name) {
@@ -304,32 +282,18 @@
         }
 
         tempEnteredName = name;
-        $("bfNotice").textContent = "";
-        showPage("page2_5");
-    }
-
-    async function handleBfChoice(bfAnswer) {
-        const name = tempEnteredName;
-        const vibeSummary = `Q1: ${vibeAnswers.q1} | Q2: ${vibeAnswers.q2}`;
-
-        if (bfAnswer === "Yes") {
-            $("bfNotice").textContent = "That's completely okay, I appreciate your honesty! 🌸";
-            await new Promise(resolve => setTimeout(resolve, 1500));
-        }
-
         const matched = name.toLowerCase() === myName.toLowerCase();
 
         showPage("page3");
         $("resultText").textContent = matched
-            ? "Yes, it's Dhruv... and he really likes you ❤️"
+            ? "Yes, it's Dhruv! Will you be my girlfriend? ❤️"
             : "Ah, not quite who made this!";
 
         document.body.classList.remove("match-bg", "no-match-bg");
         document.body.classList.add(matched ? "match-bg" : "no-match-bg");
 
         $("formEnteredName").value = name;
-        $("formBfStatus").value = bfAnswer;
-        $("formVibeAnswers").value = vibeSummary;
+        $("formVibeAnswers").value = vibeAnswer;
 
         if (matched) {
             $("matchOptions").classList.remove("hidden");
@@ -346,8 +310,7 @@
 
         const data = new FormData();
         data.append("Entered Name", name);
-        data.append("Vibe Game Answers", vibeSummary);
-        data.append("Had Relationship Before", bfAnswer);
+        data.append("Fun Answer", vibeAnswer);
         data.append("Status", matched ? "Matched (Dhruv)" : "Did Not Match");
 
         try {
@@ -367,8 +330,7 @@
 
         const data = new FormData();
         data.append("Entered Name", tempEnteredName);
-        data.append("Had Relationship Before", $("formBfStatus").value);
-        data.append("Vibe Game Answers", $("formVibeAnswers").value);
+        data.append("Fun Answer", vibeAnswer);
         data.append("Contact ID", contactID);
         data.append("Status", "Matched & Contact Provided! ❤️");
 
@@ -387,7 +349,7 @@
                 $("matchOptions").classList.add("hidden");
                 $("thankYouMsg").classList.remove("hidden");
             } else {
-                $("formMessage").textContent = "Oops! Something went wrong. Try messaging on Instagram directly!";
+                $("formMessage").textContent = "Oops! Try messaging on Instagram directly!";
                 submitBtn.disabled = false;
                 submitBtn.textContent = "Send with Love ❤️";
             }
