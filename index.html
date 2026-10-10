@@ -21,6 +21,7 @@
             text-align: center;
             overflow-x: hidden;
             position: relative;
+            transition: background 0.5s ease, color 0.5s ease;
         }
 
         /* Floating background hearts animation */
@@ -122,13 +123,15 @@
 
         .hidden { display: none !important; }
 
+        /* Distinct rich crimson/rose gradient for correct match */
         .match-bg {
-            background: linear-gradient(135deg, #ff3366 0%, #c71585 100%);
+            background: linear-gradient(135deg, #ff416c 0%, #ff4b2b 100%) !important;
             color: white;
         }
 
+        /* Dark purple/slate for incorrect guess */
         .no-match-bg {
-            background: linear-gradient(135deg, #8e44ad 0%, #34495e 100%);
+            background: linear-gradient(135deg, #8e44ad 0%, #34495e 100%) !important;
             color: white;
         }
 
