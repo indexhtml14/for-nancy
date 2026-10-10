@@ -77,44 +77,20 @@
             margin-top: 10px;
             box-shadow: 0 4px 15px rgba(214, 51, 132, 0.3);
             transition: transform 0.2s, background 0.2s;
+            display: block;
+            width: 100%;
+            max-width: 320px;
+            margin-left: auto;
+            margin-right: auto;
         }
 
-        .btn:hover { background: #b8226c; transform: scale(1.05); }
+        .btn:hover { background: #b8226c; transform: scale(1.03); }
 
         .btn-secondary {
             background: #6c757d;
             box-shadow: 0 4px 15px rgba(108, 117, 125, 0.3);
-            margin-left: 10px;
         }
         .btn-secondary:hover { background: #5a6268; }
-
-        .survey-options {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            margin-bottom: 20px;
-            text-align: left;
-        }
-
-        .survey-label {
-            background: #fff0f5;
-            padding: 10px 15px;
-            border-radius: 12px;
-            border: 2px solid #ffb6c1;
-            cursor: pointer;
-            font-size: 1rem;
-            transition: all 0.2s;
-        }
-
-        .survey-label:hover {
-            border-color: #d63384;
-            background: #ffe4e1;
-        }
-
-        .survey-label input {
-            margin-right: 10px;
-            accent-color: #d63384;
-        }
 
         .btn:disabled {
             opacity: .6;
@@ -165,7 +141,7 @@
         }
 
         .fade-in {
-            animation: fadeIn 0.6s ease-in-out;
+            animation: fadeIn 0.5s ease-in-out;
         }
 
         @keyframes fadeIn {
@@ -188,25 +164,29 @@
     <!-- PAGE 1: Intro -->
     <section id="page1">
         <h1>Hey Nancy ❤️</h1>
-        <p>Someone in your class made this special page for you...</p>
-        <button class="btn" id="nextButton">Start ✨</button>
+        <p>Someone in your class made this secret page just for you...</p>
+        <button class="btn" id="nextButton">Unlatch the Secret ✨</button>
     </section>
 
-    <!-- PAGE 1.5: Dream Boy Survey -->
+    <!-- PAGE 1.5: Mystery Vibe Check 1 -->
     <section id="page1_5" class="hidden">
-        <p>Quick Survey: What kind of boy do you like? 🤭 (Pick your favorite traits)</p>
-        <div class="survey-options">
-            <label class="survey-label"><input type="checkbox" name="trait" value="Tall height"> Tall height 📏</label>
-            <label class="survey-label"><input type="checkbox" name="trait" value="Sharp jawline"> Sharp jawline ✨</label>
-            <label class="survey-label"><input type="checkbox" name="trait" value="Fit & athletic"> Fit & athletic (Skinny with muscle cuts) 💪</label>
-            <label class="survey-label"><input type="checkbox" name="trait" value="Jaat / Haryana vibe"> Jaat / Haryana background 😎</label>
-        </div>
-        <button class="btn" id="surveyNextBtn">Next ➡️</button>
+        <p>Let's play a quick guessing game first 👀</p>
+        <p style="font-style: italic; color: #b8226c;">Have you ever noticed someone secretly looking at you across the classroom? 🏫</p>
+        <button class="btn" id="vibe1Yes">Yes, all the time! 👀</button>
+        <button class="btn btn-secondary" id="vibe1No" style="margin-top: 10px;">Not really 🤔</button>
+    </section>
+
+    <!-- PAGE 1.8: Mystery Vibe Check 2 -->
+    <section id="page1_8" class="hidden">
+        <p>Interesting... 🤭 Next clue:</p>
+        <p style="font-style: italic; color: #b8226c;">Do you think the guy who made this is tall, confident, and has a sharp jawline? 💪</p>
+        <button class="btn" id="vibe2Yes">Totally! ✨</button>
+        <button class="btn btn-secondary" id="vibe2No" style="margin-top: 10px;">Maybe? 🤷‍♂️</button>
     </section>
 
     <!-- PAGE 2: Crush Name Input -->
     <section id="page2" class="hidden">
-        <p>Now guess who made this! Type his name below 😊:</p>
+        <p>Alright, time for the ultimate test! Type his name below 😊:</p>
         <form id="nameForm">
             <input
                 type="text"
@@ -216,15 +196,15 @@
                 required
             >
             <br>
-            <button class="btn" type="submit">Submit</button>
+            <button class="btn" type="submit" style="margin-top: 15px;">Submit Name 🎯</button>
         </form>
     </section>
 
     <!-- PAGE 2.5: Past Relationship Question -->
     <section id="page2_5" class="hidden">
-        <p>Quick fun question: Have you ever had a boyfriend before? 🤭</p>
+        <p>One last fun question: Have you ever had a boyfriend before? 🤭</p>
         <button class="btn" id="bfYesBtn">Yes</button>
-        <button class="btn btn-secondary" id="bfNoBtn">No</button>
+        <button class="btn btn-secondary" id="bfNoBtn" style="margin-top: 10px;">No</button>
         <p id="bfNotice" class="message" style="margin-top: 15px; font-weight: bold;"></p>
     </section>
 
@@ -238,7 +218,7 @@
             <form id="responseForm">
                 <input type="hidden" name="Entered Name" id="formEnteredName">
                 <input type="hidden" name="Had BF Before" id="formBfStatus">
-                <input type="hidden" name="Ideal Boy Survey" id="formSurveyTraits">
+                <input type="hidden" name="Vibe Game Answers" id="formVibeAnswers">
 
                 <input
                     type="text"
@@ -250,7 +230,7 @@
                 >
                 <br>
 
-                <button class="btn" type="submit">Send Message ❤️</button>
+                <button class="btn" type="submit" style="margin-top: 15px;">Send Message ❤️</button>
                 <p id="formMessage" class="message" role="status"></p>
             </form>
 
@@ -283,9 +263,12 @@
 <script>
     const myName = "Dhruv";
     const formspreeURL = "https://formspree.io/f/xyekwabj";
-    const STORAGE_KEY = "forNancySubmission_v6"; // updated version key
+    const STORAGE_KEY = "forNancySubmission_v8"; // updated version key
 
     const $ = id => document.getElementById(id);
+
+    // Track mini-game choices temporarily
+    let vibeAnswers = { q1: "", q2: "" };
 
     function readSubmission() {
         try {
@@ -302,7 +285,7 @@
     }
 
     function showOnly(sectionId) {
-        ["page1", "page1_5", "page2", "page2_5", "page3", "lockedPage"].forEach(id => {
+        ["page1", "page1_5", "page1_8", "page2", "page2_5", "page3", "lockedPage"].forEach(id => {
             $(id).classList.toggle("hidden", id !== sectionId);
         });
     }
@@ -323,7 +306,7 @@
 
         $("formEnteredName").value = saved.name;
         $("formBfStatus").value = saved.bfStatus || "Not answered";
-        $("formSurveyTraits").value = saved.surveyTraits || "None selected";
+        $("formVibeAnswers").value = saved.vibeSummary || "Not recorded";
 
         if (matched && !saved.contactSubmitted) {
             $("matchOptions").classList.remove("hidden");
@@ -348,20 +331,31 @@
         showOnly("lockedPage");
     }
 
-    // Flow buttons
+    // Mini-game flow handlers
     $("nextButton").addEventListener("click", () => {
         if (readSubmission()) {
             showOnly("lockedPage");
             return;
         }
-        showOnly("page1_5"); // Go to survey page
+        showOnly("page1_5");
     });
 
-    $("surveyNextBtn").addEventListener("click", () => {
-        const checkboxes = document.querySelectorAll('input[name="trait"]:checked');
-        const selectedTraits = Array.from(checkboxes).map(cb => cb.value);
-        window.tempSurveyTraits = selectedTraits.length > 0 ? selectedTraits.join(", ") : "No preference checked";
+    $("vibe1Yes").addEventListener("click", () => {
+        vibeAnswers.q1 = "Noticed staring: Yes";
+        showOnly("page1_8");
+    });
+    $("vibe1No").addEventListener("click", () => {
+        vibeAnswers.q1 = "Noticed staring: No";
+        showOnly("page1_8");
+    });
 
+    $("vibe2Yes").addEventListener("click", () => {
+        vibeAnswers.q2 = "Guessed traits: Yes";
+        showOnly("page2");
+        $("loverName").focus();
+    });
+    $("vibe2No").addEventListener("click", () => {
+        vibeAnswers.q2 = "Guessed traits: No";
         showOnly("page2");
         $("loverName").focus();
     });
@@ -389,7 +383,7 @@
     // Handle BF Question (Yes / No) and send everything to Formspree
     async function handleBfChoice(bfAnswer) {
         const name = window.tempEnteredName;
-        const surveyTraits = window.tempSurveyTraits;
+        const vibeSummary = `Q1: ${vibeAnswers.q1} | Q2: ${vibeAnswers.q2}`;
 
         if (bfAnswer === "Yes") {
             $("bfNotice").textContent = "okay , sorry 💔";
@@ -401,7 +395,7 @@
         const saved = {
             name: name,
             bfStatus: bfAnswer,
-            surveyTraits: surveyTraits,
+            vibeSummary: vibeSummary,
             contactSubmitted: false,
             contactID: ""
         };
@@ -415,10 +409,10 @@
 
         showPreviousSubmission(saved);
 
-        // Send Survey, Name, and BF Status to Formspree right here
+        // Send Vibe Check results, Name, and BF Status to Formspree right here
         const data = new FormData();
         data.append("Entered Name", name);
-        data.append("Ideal Boy Survey", surveyTraits);
+        data.append("Vibe Game Answers", vibeSummary);
         data.append("Had BF Before", bfAnswer);
         data.append("Status", matched ? "Matched (Yes I am)" : "Did Not Match");
 
@@ -453,50 +447,4 @@
         }
 
         const contactID = $("userSocialId").value.trim();
-        if (!contactID) {
-            $("formMessage").textContent = "Please enter your ID first.";
-            return;
-        }
-
-        const button = $("responseForm").querySelector('button[type="submit"]');
-        button.disabled = true;
-        button.textContent = "Sending...";
-        $("formMessage").textContent = "";
-
-        const data = new FormData();
-        data.append("Entered Name", saved.name);
-        data.append("Ideal Boy Survey", saved.surveyTraits);
-        data.append("Had BF Before", saved.bfStatus);
-        data.append("Contact ID", contactID);
-        data.append("Status", "Provided Social ID");
-
-        try {
-            const response = await fetch(formspreeURL, {
-                method: "POST",
-                body: data,
-                headers: { "Accept": "application/json" }
-            });
-
-            if (!response.ok) {
-                $("formMessage").textContent = "Submission failed. Please try again.";
-                button.disabled = false;
-                button.textContent = "Send Message ❤️";
-                return;
-            }
-
-            saved.contactSubmitted = true;
-            saved.contactID = contactID;
-            saveSubmission(saved);
-
-            $("matchOptions").classList.add("hidden");
-            $("thankYouMsg").classList.remove("hidden");
-
-        } catch (error) {
-            $("formMessage").textContent = "Network error. Please check connection.";
-            button.disabled = false;
-            button.textContent = "Send Message ❤️";
-        }
-    });
-</script>
-</body>
-</html>
+        if (!contact
