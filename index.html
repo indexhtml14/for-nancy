@@ -161,7 +161,7 @@
     <section id="page1">
         <h1>Hey Nancy ❤️</h1>
         <p>I built this little corner of the internet just for you, because some feelings are too special to keep to a whisper...</p>
-        <button class="btn" id="nextButton">Open it up ✨</button>
+        <button class="btn" id="nextButton">Next ✨</button>
     </section>
 
     <!-- PAGE 1.5: Sweet Vibe Check 1 -->
@@ -259,107 +259,4 @@
 <script>
     const myName = "Dhruv";
     const formspreeURL = "https://formspree.io/f/xyekwabj";
-    const STORAGE_KEY = "forNancySubmission_v9";
-
-    const $ = id => document.getElementById(id);
-
-    let vibeAnswers = { q1: "", q2: "" };
-
-    function readSubmission() {
-        try {
-            const saved = localStorage.getItem(STORAGE_KEY);
-            return saved ? JSON.parse(saved) : null;
-        } catch (error) {
-            console.error("Could not read saved submission:", error);
-            return null;
-        }
-    }
-
-    function saveSubmission(data) {
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
-    }
-
-    function showOnly(sectionId) {
-        ["page1", "page1_5", "page1_8", "page2", "page2_5", "page3", "lockedPage"].forEach(id => {
-            $(id).classList.toggle("hidden", id !== sectionId);
-        });
-    }
-
-    function showPreviousSubmission(saved) {
-        if (!saved || !saved.name) return;
-
-        showOnly("page3");
-
-        const matched = saved.name.toLowerCase() === myName.toLowerCase();
-
-        $("resultText").textContent = matched
-            ? "Yes, it's Dhruv... and he really likes you ❤️"
-            : "Ah, not quite who made this!";
-
-        document.body.classList.remove("match-bg", "no-match-bg");
-        document.body.classList.add(matched ? "match-bg" : "no-match-bg");
-
-        $("formEnteredName").value = saved.name;
-        $("formBfStatus").value = saved.bfStatus || "Not answered";
-        $("formVibeAnswers").value = saved.vibeSummary || "Not recorded";
-
-        if (matched && !saved.contactSubmitted) {
-            $("matchOptions").classList.remove("hidden");
-            $("thankYouMsg").classList.add("hidden");
-        } else if (saved.contactSubmitted) {
-            $("matchOptions").classList.add("hidden");
-            $("thankYouMsg").classList.remove("hidden");
-        } else {
-            $("matchOptions").classList.add("hidden");
-        }
-    }
-
-    try {
-        const saved = readSubmission();
-        if (saved && saved.name && saved.bfStatus) {
-            showPreviousSubmission(saved);
-        } else {
-            showOnly("page1");
-        }
-    } catch (error) {
-        showOnly("lockedPage");
-    }
-
-    $("nextButton").addEventListener("click", () => {
-        if (readSubmission()) {
-            showOnly("lockedPage");
-            return;
-        }
-        showOnly("page1_5");
-    });
-
-    $("vibe1Yes").addEventListener("click", () => {
-        vibeAnswers.q1 = "Believes in bright moments: Yes";
-        showOnly("page1_8");
-    });
-    $("vibe1No").addEventListener("click", () => {
-        vibeAnswers.q1 = "Believes in bright moments: Maybe";
-        showOnly("page1_8");
-    });
-
-    $("vibe2Yes").addEventListener("click", () => {
-        vibeAnswers.q2 = "Caught someone smiling: Yes";
-        showOnly("page2");
-        $("loverName").focus();
-    });
-    $("vibe2No").addEventListener("click", () => {
-        vibeAnswers.q2 = "Caught someone smiling: Not sure";
-        showOnly("page2");
-        $("loverName").focus();
-    });
-
-    $("nameForm").addEventListener("submit", event => {
-        event.preventDefault();
-
-        if (readSubmission()) {
-            showOnly("lockedPage");
-            return;
-        }
-
-        const name = $("loverName").value.trim();
-        if (!name) {
+    const STORAGE_KEY = "forNancySubmission
