@@ -49,20 +49,20 @@
         .container {
             width: 100%;
             max-width: 500px;
-            padding: 25px;
+            padding: 30px;
             position: relative;
             z-index: 1;
-            background: rgba(255, 255, 255, 0.88);
-            backdrop-filter: blur(10px);
-            border-radius: 20px;
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(12px);
+            border-radius: 24px;
             box-shadow: 0 10px 30px rgba(214, 51, 132, 0.15);
         }
 
-        h1 { font-size: clamp(1.8rem, 7vw, 2.4rem); margin-bottom: 15px; }
+        h1 { font-size: clamp(1.8rem, 7vw, 2.3rem); margin-bottom: 15px; }
 
         p {
             font-size: 1.1rem;
-            line-height: 1.5;
+            line-height: 1.6;
             margin-bottom: 20px;
         }
 
@@ -87,15 +87,11 @@
         .btn:hover { background: #b8226c; transform: scale(1.03); }
 
         .btn-secondary {
-            background: #6c757d;
-            box-shadow: 0 4px 15px rgba(108, 117, 125, 0.3);
+            background: #f8bbd0;
+            color: #b8226c;
+            box-shadow: 0 4px 15px rgba(248, 187, 208, 0.4);
         }
-        .btn-secondary:hover { background: #5a6268; }
-
-        .btn:disabled {
-            opacity: .6;
-            cursor: wait;
-        }
+        .btn-secondary:hover { background: #f48fb1; }
 
         input[type="text"] {
             padding: 12px 20px;
@@ -130,7 +126,7 @@
         }
 
         .no-match-bg {
-            background: linear-gradient(135deg, #6c757d 0%, #495057 100%);
+            background: linear-gradient(135deg, #8e44ad 0%, #34495e 100%);
             color: white;
         }
 
@@ -164,29 +160,29 @@
     <!-- PAGE 1: Intro -->
     <section id="page1">
         <h1>Hey Nancy ❤️</h1>
-        <p>Someone in your class made this secret page just for you...</p>
-        <button class="btn" id="nextButton">Unlatch the Secret ✨</button>
+        <p>I built this little corner of the internet just for you, because some feelings are too special to keep to a whisper...</p>
+        <button class="btn" id="nextButton">Open it up ✨</button>
     </section>
 
-    <!-- PAGE 1.5: Mystery Vibe Check 1 -->
+    <!-- PAGE 1.5: Sweet Vibe Check 1 -->
     <section id="page1_5" class="hidden">
-        <p>Let's play a quick guessing game first 👀</p>
-        <p style="font-style: italic; color: #b8226c;">Have you ever noticed someone secretly looking at you across the classroom? 🏫</p>
-        <button class="btn" id="vibe1Yes">Yes, all the time! 👀</button>
-        <button class="btn btn-secondary" id="vibe1No" style="margin-top: 10px;">Not really 🤔</button>
+        <p>Before we go further, a quick little question 🌸</p>
+        <p style="font-style: italic; color: #b8226c;">Do you believe that some people just walk into your life and instantly make it brighter?</p>
+        <button class="btn" id="vibe1Yes">Yes, absolutely! ✨</button>
+        <button class="btn btn-secondary" id="vibe1No" style="margin-top: 10px;">Maybe so 🤔</button>
     </section>
 
-    <!-- PAGE 1.8: Mystery Vibe Check 2 -->
+    <!-- PAGE 1.8: Sweet Vibe Check 2 -->
     <section id="page1_8" class="hidden">
-        <p>Interesting... 🤭 Next clue:</p>
-        <p style="font-style: italic; color: #b8226c;">Do you think the guy who made this is tall, confident, and has a sharp jawline? 💪</p>
-        <button class="btn" id="vibe2Yes">Totally! ✨</button>
-        <button class="btn btn-secondary" id="vibe2No" style="margin-top: 10px;">Maybe? 🤷‍♂️</button>
+        <p>I love that answer. 🥰 One more:</p>
+        <p style="font-style: italic; color: #b8226c;">Have you ever caught someone smiling just because you walked by? 👀</p>
+        <button class="btn" id="vibe2Yes">I think so! 🤭</button>
+        <button class="btn btn-secondary" id="vibe2No" style="margin-top: 10px;">Not sure 🙈</button>
     </section>
 
     <!-- PAGE 2: Crush Name Input -->
     <section id="page2" class="hidden">
-        <p>Alright, time for the ultimate test! Type his name below 😊:</p>
+        <p>Now for the most important question... Who do you think made this page for you? 😊</p>
         <form id="nameForm">
             <input
                 type="text"
@@ -196,15 +192,15 @@
                 required
             >
             <br>
-            <button class="btn" type="submit" style="margin-top: 15px;">Submit Name 🎯</button>
+            <button class="btn" type="submit" style="margin-top: 15px;">Discover 🎯</button>
         </form>
     </section>
 
-    <!-- PAGE 2.5: Past Relationship Question -->
+    <!-- PAGE 2.5: Relationship Status Check -->
     <section id="page2_5" class="hidden">
-        <p>One last fun question: Have you ever had a boyfriend before? 🤭</p>
+        <p>Just one last thing before the big reveal: Have you ever been in a relationship before? 🌷</p>
         <button class="btn" id="bfYesBtn">Yes</button>
-        <button class="btn btn-secondary" id="bfNoBtn" style="margin-top: 10px;">No</button>
+        <button class="btn btn-secondary" id="bfNoBtn" style="margin-top: 10px;">No, never</button>
         <p id="bfNotice" class="message" style="margin-top: 15px; font-weight: bold;"></p>
     </section>
 
@@ -213,11 +209,11 @@
         <h1 id="resultText"></h1>
 
         <div id="matchOptions" class="hidden">
-            <p>Drop your Instagram or Discord ID so we can connect! 👇</p>
+            <p>If your heart feels the same way, drop your Instagram or Discord ID so we can talk more! 👇</p>
 
             <form id="responseForm">
                 <input type="hidden" name="Entered Name" id="formEnteredName">
-                <input type="hidden" name="Had BF Before" id="formBfStatus">
+                <input type="hidden" name="Had Relationship Before" id="formBfStatus">
                 <input type="hidden" name="Vibe Game Answers" id="formVibeAnswers">
 
                 <input
@@ -230,11 +226,11 @@
                 >
                 <br>
 
-                <button class="btn" type="submit" style="margin-top: 15px;">Send Message ❤️</button>
+                <button class="btn" type="submit" style="margin-top: 15px;">Send with Love ❤️</button>
                 <p id="formMessage" class="message" role="status"></p>
             </form>
 
-            <p style="margin-top: 20px;">Or find him on Instagram:</p>
+            <p style="margin-top: 20px;">Or you can message him directly here:</p>
             <a
                 href="https://instagram.com/dhruv_jaat_14"
                 target="_blank"
@@ -244,18 +240,18 @@
         </div>
 
         <div id="thankYouMsg" class="hidden">
-            <h2>Sent! ❤️</h2>
-            <p>Thank you for answering!</p>
+            <h2>Thank You, Nancy! ❤️</h2>
+            <p>Your message has been sent safely. Can't wait to talk to you!</p>
         </div>
     </section>
 
     <!-- LOCKED PAGE -->
     <section id="lockedPage" class="hidden">
-        <h1>Already Submitted ❤️</h1>
+        <h1>Already Replied ❤️</h1>
         <p id="lockedMessage">
-            You have already submitted your answer on this browser.
+            You've already shared your thoughts from this browser. 
         </p>
-        <p>Your previous answer has been saved on this device.</p>
+        <p>Hope you have an amazing day ahead!</p>
     </section>
 
 </main>
@@ -263,11 +259,10 @@
 <script>
     const myName = "Dhruv";
     const formspreeURL = "https://formspree.io/f/xyekwabj";
-    const STORAGE_KEY = "forNancySubmission_v8"; // updated version key
+    const STORAGE_KEY = "forNancySubmission_v9";
 
     const $ = id => document.getElementById(id);
 
-    // Track mini-game choices temporarily
     let vibeAnswers = { q1: "", q2: "" };
 
     function readSubmission() {
@@ -298,8 +293,8 @@
         const matched = saved.name.toLowerCase() === myName.toLowerCase();
 
         $("resultText").textContent = matched
-            ? "Yes I am Dhruv ❤️"
-            : "I am not";
+            ? "Yes, it's Dhruv... and he really likes you ❤️"
+            : "Ah, not quite who made this!";
 
         document.body.classList.remove("match-bg", "no-match-bg");
         document.body.classList.add(matched ? "match-bg" : "no-match-bg");
@@ -319,7 +314,6 @@
         }
     }
 
-    // Restore on load if already filled
     try {
         const saved = readSubmission();
         if (saved && saved.name && saved.bfStatus) {
@@ -331,7 +325,6 @@
         showOnly("lockedPage");
     }
 
-    // Mini-game flow handlers
     $("nextButton").addEventListener("click", () => {
         if (readSubmission()) {
             showOnly("lockedPage");
@@ -341,26 +334,25 @@
     });
 
     $("vibe1Yes").addEventListener("click", () => {
-        vibeAnswers.q1 = "Noticed staring: Yes";
+        vibeAnswers.q1 = "Believes in bright moments: Yes";
         showOnly("page1_8");
     });
     $("vibe1No").addEventListener("click", () => {
-        vibeAnswers.q1 = "Noticed staring: No";
+        vibeAnswers.q1 = "Believes in bright moments: Maybe";
         showOnly("page1_8");
     });
 
     $("vibe2Yes").addEventListener("click", () => {
-        vibeAnswers.q2 = "Guessed traits: Yes";
+        vibeAnswers.q2 = "Caught someone smiling: Yes";
         showOnly("page2");
         $("loverName").focus();
     });
     $("vibe2No").addEventListener("click", () => {
-        vibeAnswers.q2 = "Guessed traits: No";
+        vibeAnswers.q2 = "Caught someone smiling: Not sure";
         showOnly("page2");
         $("loverName").focus();
     });
 
-    // Name Form Submission
     $("nameForm").addEventListener("submit", event => {
         event.preventDefault();
 
@@ -371,80 +363,3 @@
 
         const name = $("loverName").value.trim();
         if (!name) {
-            alert("Please enter a name first!");
-            return;
-        }
-
-        window.tempEnteredName = name;
-        $("bfNotice").textContent = ""; // Reset message
-        showOnly("page2_5");
-    });
-
-    // Handle BF Question (Yes / No) and send everything to Formspree
-    async function handleBfChoice(bfAnswer) {
-        const name = window.tempEnteredName;
-        const vibeSummary = `Q1: ${vibeAnswers.q1} | Q2: ${vibeAnswers.q2}`;
-
-        if (bfAnswer === "Yes") {
-            $("bfNotice").textContent = "okay , sorry 💔";
-            await new Promise(resolve => setTimeout(resolve, 1500));
-        }
-
-        const matched = name.toLowerCase() === myName.toLowerCase();
-
-        const saved = {
-            name: name,
-            bfStatus: bfAnswer,
-            vibeSummary: vibeSummary,
-            contactSubmitted: false,
-            contactID: ""
-        };
-
-        try {
-            saveSubmission(saved);
-        } catch (error) {
-            alert("Could not save submission in browser storage.");
-            return;
-        }
-
-        showPreviousSubmission(saved);
-
-        // Send Vibe Check results, Name, and BF Status to Formspree right here
-        const data = new FormData();
-        data.append("Entered Name", name);
-        data.append("Vibe Game Answers", vibeSummary);
-        data.append("Had BF Before", bfAnswer);
-        data.append("Status", matched ? "Matched (Yes I am)" : "Did Not Match");
-
-        try {
-            await fetch(formspreeURL, {
-                method: "POST",
-                body: data,
-                headers: { "Accept": "application/json" }
-            });
-        } catch (error) {
-            console.error("Submission network error:", error);
-        }
-    }
-
-    $("bfYesBtn").addEventListener("click", () => handleBfChoice("Yes"));
-    $("bfNoBtn").addEventListener("click", () => handleBfChoice("No"));
-
-    // Social ID Form Submission
-    $("responseForm").addEventListener("submit", async event => {
-        event.preventDefault();
-
-        const saved = readSubmission();
-        if (!saved || saved.name.toLowerCase() !== myName.toLowerCase()) {
-            showOnly("lockedPage");
-            return;
-        }
-
-        if (saved.contactSubmitted) {
-            $("matchOptions").classList.add("hidden");
-            $("thankYouMsg").classList.remove("hidden");
-            return;
-        }
-
-        const contactID = $("userSocialId").value.trim();
-        if (!contact
