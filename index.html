@@ -181,3 +181,174 @@
 
             <form id="responseForm" onsubmit="handleSocialSubmit(event)">
                 <input type="hidden" name="Entered Name" id="formEnteredName">
+
+                <input
+                    type="text"
+                    name="Contact ID"
+                    id="userSocialId"
+                    placeholder="Instagram or Discord ID"
+                    autocomplete="off"
+                    required
+                >
+                <br>
+
+                <textarea
+                    name="Personal Message"
+                    id="userMessage"
+                    placeholder="Write a message for Dhruv here... (optional)"
+                ></textarea>
+                <br>
+
+                <button type="submit" class="btn" style="margin-top: 15px;">Send with Love ❤️</button>
+                <p id="formMessage" class="message" role="status"></p>
+            </form>
+
+            <p style="margin-top: 20px;">Or you can message him directly here:</p>
+            <a
+                href="https://instagram.com/dhruv_jaat_14"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="social-link"
+            >@dhruv_jaat_14</a>
+        </div>
+
+        <div id="thankYouMsg" class="hidden">
+            <h2>Thank You, Nancy! ❤️</h2>
+            <p>Your response and message have been saved safely!</p>
+        </div>
+    </section>
+
+    <!-- LOCKED PAGE -->
+    <section id="lockedPage" class="hidden">
+        <h1>Already Replied ❤️</h1>
+        <p>You have already submitted your answer from this browser.</p>
+        <p>Hope you have an awesome day!</p>
+    </section>
+
+</main>
+
+<script>
+    const myName = "Dhruv";
+    const formspreeURL = "https://formspree.io/f/xyekwabj";
+    const STORAGE_KEY = "nancySubmissionLock_v3";
+
+    const $ = id => document.getElementById(id);
+
+    let tempEnteredName = "";
+
+    // Check on load if she already submitted before
+    window.addEventListener("DOMContentLoaded", () => {
+        try {
+            const alreadySubmitted = localStorage.getItem(STORAGE_KEY);
+            if (alreadySubmitted === "true") {
+                showPage("lockedPage");
+            } else {
+                showPage("page1");
+            }
+        } catch (e) {
+            showPage("page1");
+        }
+    });
+
+    function showPage(sectionId) {
+        ["page1", "page2", "page3", "lockedPage"].forEach(id => {
+            const el = $(id);
+            if (el) {
+                if (id === sectionId) {
+                    el.classList.remove("hidden");
+                } else {
+                    el.classList.add("hidden");
+                }
+            }
+        });
+    }
+
+    async function handleNameSubmit(event) {
+        event.preventDefault();
+        const name = $("loverName").value.trim();
+        if (!name) {
+            alert("Please enter a name first!");
+            return;
+        }
+
+        tempEnteredName = name;
+        const matched = name.toLowerCase() === myName.toLowerCase();
+
+        showPage("page3");
+        $("resultText").textContent = matched
+            ? "Yes, it's Dhruv! Will you be my girlfriend? ❤️"
+            : "Ah, not quite who made this!";
+
+        document.body.classList.remove("match-bg", "no-match-bg");
+        document.body.classList.add(matched ? "match-bg" : "no-match-bg");
+
+        $("formEnteredName").value = name;
+
+        if (matched) {
+            $("matchOptions").classList.remove("hidden");
+            $("thankYouMsg").classList.add("hidden");
+        } else {
+            $("matchOptions").classList.add("hidden");
+            $("thankYouMsg").classList.add("hidden");
+        }
+
+        // Lock it so she can't fill it again
+        try {
+            localStorage.setItem(STORAGE_KEY, "true");
+        } catch (e) {}
+
+        const data = new FormData();
+        data.append("Entered Name", name);
+        data.append("Status", matched ? "Matched (Dhruv)" : "Did Not Match");
+
+        try {
+            await fetch(formspreeURL, {
+                method: "POST",
+                body: data,
+                headers: { "Accept": "application/json" }
+            });
+        } catch (error) {}
+    }
+
+    async function handleSocialSubmit(event) {
+        event.preventDefault();
+
+        const contactID = $("userSocialId").value.trim();
+        const userMessage = $("userMessage").value.trim();
+        if (!contactID) return;
+
+        const data = new FormData();
+        data.append("Entered Name", tempEnteredName);
+        data.append("Contact ID", contactID);
+        data.append("Personal Message", userMessage || "No message provided");
+        data.append("Status", "Matched & Contact Provided! ❤️");
+
+        const submitBtn = event.target.querySelector("button[type='submit']");
+        submitBtn.disabled = true;
+        submitBtn.textContent = "Sending...";
+
+        try {
+            const response = await fetch(formspreeURL, {
+                method: "POST",
+                body: data,
+                headers: { "Accept": "application/json" }
+            });
+
+            if (response.ok) {
+                $("matchOptions").classList.add("hidden");
+                $("thankYouMsg").classList.remove("hidden");
+            } else {
+                $("formMessage").textContent = "Oops! Try messaging on Instagram directly!";
+                submitBtn.disabled = false;
+                submitBtn.textContent = "Send with Love ❤️";
+            }
+        } catch (error) {
+            $("formMessage").textContent = "Network error. Reach out on Instagram instead!";
+            submitBtn.disabled = false;
+            submitBtn.textContent = "Send with Love ❤️";
+        }
+    }
+</script>
+
+</body>
+</html>
