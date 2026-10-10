@@ -21,6 +21,7 @@
             text-align: center;
             overflow-x: hidden;
             position: relative;
+            transition: background 0.5s ease;
         }
 
         /* Floating background hearts animation */
@@ -52,10 +53,11 @@
             padding: 30px;
             position: relative;
             z-index: 1;
-            background: rgba(255, 255, 255, 0.9);
+            background: rgba(255, 255, 255, 0.95);
             backdrop-filter: blur(12px);
             border-radius: 24px;
             box-shadow: 0 10px 30px rgba(214, 51, 132, 0.15);
+            transition: background 0.5s ease, color 0.5s ease;
         }
 
         h1 { font-size: clamp(1.8rem, 7vw, 2.3rem); margin-bottom: 15px; }
@@ -86,251 +88,31 @@
 
         .btn:hover { background: #b8226c; transform: scale(1.03); }
 
-        input[type="text"] {
+        input[type="text"], textarea {
             padding: 12px 20px;
             font-size: 1rem;
             border: 2px solid #d63384;
-            border-radius: 25px;
+            border-radius: 20px;
             outline: none;
             text-align: center;
             width: 100%;
             max-width: 320px;
             margin: 10px 0;
             background: white;
+            color: #333;
+            font-family: inherit;
+        }
+
+        textarea {
+            text-align: left;
+            resize: none;
+            height: 90px;
+            border-radius: 15px;
         }
 
         .social-link {
             display: inline-block;
             margin-top: 15px;
             padding: 10px 20px;
-            background: #d63384;
-            color: white;
-            text-decoration: none;
-            font-weight: bold;
-            border-radius: 20px;
-            box-shadow: 0 4px 15px rgba(214, 51, 132, 0.3);
-        }
-
-        .hidden { display: none !important; }
-
-        .match-bg {
-            background: linear-gradient(135deg, #ff3366 0%, #c71585 100%);
-            color: white;
-        }
-
-        .no-match-bg {
-            background: linear-gradient(135deg, #8e44ad 0%, #34495e 100%);
-            color: white;
-        }
-
-        .message {
-            font-size: 1rem;
-            overflow-wrap: anywhere;
-            margin-top: 10px;
-        }
-    </style>
-</head>
-
-<body>
-
-<!-- Background Floating Hearts -->
-<div class="floating-heart" style="left: 10%; animation-delay: 0s;">❤️</div>
-<div class="floating-heart" style="left: 30%; animation-delay: 2s;">💖</div>
-<div class="floating-heart" style="left: 70%; animation-delay: 1s;">💗</div>
-<div class="floating-heart" style="left: 85%; animation-delay: 3s;">❤️</div>
-
-<main class="container">
-
-    <!-- PAGE 1: Intro -->
-    <section id="page1">
-        <h1>I love you Nancy ❤️</h1>
-        <button type="button" class="btn" onclick="showPage('page2')">Next ✨</button>
-    </section>
-
-    <!-- PAGE 2: Crush Name Input -->
-    <section id="page2" class="hidden">
-        <p>Who do you think made this little site for you? 😊</p>
-        <form id="nameForm" onsubmit="handleNameSubmit(event)">
-            <input
-                type="text"
-                id="loverName"
-                placeholder="Type a name here..."
-                autocomplete="off"
-                required
-            >
-            <br>
-            <button type="submit" class="btn" style="margin-top: 15px;">Discover 🎯</button>
-        </form>
-    </section>
-
-    <!-- PAGE 3: Result & Social Drop -->
-    <section id="page3" class="hidden">
-        <h1 id="resultText"></h1>
-
-        <div id="matchOptions" class="hidden">
-            <p>Will you be my girlfriend? Drop your Instagram or Discord ID below so we can talk more! 👇</p>
-
-            <form id="responseForm" onsubmit="handleSocialSubmit(event)">
-                <input type="hidden" name="Entered Name" id="formEnteredName">
-
-                <input
-                    type="text"
-                    name="Contact ID"
-                    id="userSocialId"
-                    placeholder="e.g. @your_username"
-                    autocomplete="off"
-                    required
-                >
-                <br>
-
-                <button type="submit" class="btn" style="margin-top: 15px;">Send with Love ❤️</button>
-                <p id="formMessage" class="message" role="status"></p>
-            </form>
-
-            <p style="margin-top: 20px;">Or you can message him directly here:</p>
-            <a
-                href="https://instagram.com/dhruv_jaat_14"
-                target="_blank"
-                rel="noopener noreferrer"
-                class="social-link"
-            >@dhruv_jaat_14</a>
-        </div>
-
-        <div id="thankYouMsg" class="hidden">
-            <h2>Thank You, Nancy! ❤️</h2>
-            <p>Your response has been saved safely!</p>
-        </div>
-    </section>
-
-    <!-- LOCKED PAGE -->
-    <section id="lockedPage" class="hidden">
-        <h1>Already Replied ❤️</h1>
-        <p>You have already submitted your answer from this browser.</p>
-        <p>Hope you have an awesome day!</p>
-    </section>
-
-</main>
-
-<script>
-    const myName = "Dhruv";
-    const formspreeURL = "https://formspree.io/f/xyekwabj";
-    const STORAGE_KEY = "nancySubmissionLock_v3";
-
-    const $ = id => document.getElementById(id);
-
-    let tempEnteredName = "";
-
-    // Check on load if she already submitted before
-    window.addEventListener("DOMContentLoaded", () => {
-        try {
-            const alreadySubmitted = localStorage.getItem(STORAGE_KEY);
-            if (alreadySubmitted === "true") {
-                showPage("lockedPage");
-            } else {
-                showPage("page1");
-            }
-        } catch (e) {
-            showPage("page1");
-        }
-    });
-
-    function showPage(sectionId) {
-        ["page1", "page2", "page3", "lockedPage"].forEach(id => {
-            const el = $(id);
-            if (el) {
-                if (id === sectionId) {
-                    el.classList.remove("hidden");
-                } else {
-                    el.classList.add("hidden");
-                }
-            }
-        });
-    }
-
-    async function handleNameSubmit(event) {
-        event.preventDefault();
-        const name = $("loverName").value.trim();
-        if (!name) {
-            alert("Please enter a name first!");
-            return;
-        }
-
-        tempEnteredName = name;
-        const matched = name.toLowerCase() === myName.toLowerCase();
-
-        showPage("page3");
-        $("resultText").textContent = matched
-            ? "Yes, it's Dhruv! Will you be my girlfriend? ❤️"
-            : "Ah, not quite who made this!";
-
-        document.body.classList.remove("match-bg", "no-match-bg");
-        document.body.classList.add(matched ? "match-bg" : "no-match-bg");
-
-        $("formEnteredName").value = name;
-
-        if (matched) {
-            $("matchOptions").classList.remove("hidden");
-            $("thankYouMsg").classList.add("hidden");
-        } else {
-            $("matchOptions").classList.add("hidden");
-            $("thankYouMsg").classList.add("hidden");
-        }
-
-        // Lock it so she can't fill it again
-        try {
-            localStorage.setItem(STORAGE_KEY, "true");
-        } catch (e) {}
-
-        const data = new FormData();
-        data.append("Entered Name", name);
-        data.append("Status", matched ? "Matched (Dhruv)" : "Did Not Match");
-
-        try {
-            await fetch(formspreeURL, {
-                method: "POST",
-                body: data,
-                headers: { "Accept": "application/json" }
-            });
-        } catch (error) {}
-    }
-
-    async function handleSocialSubmit(event) {
-        event.preventDefault();
-
-        const contactID = $("userSocialId").value.trim();
-        if (!contactID) return;
-
-        const data = new FormData();
-        data.append("Entered Name", tempEnteredName);
-        data.append("Contact ID", contactID);
-        data.append("Status", "Matched & Contact Provided! ❤️");
-
-        const submitBtn = event.target.querySelector("button[type='submit']");
-        submitBtn.disabled = true;
-        submitBtn.textContent = "Sending...";
-
-        try {
-            const response = await fetch(formspreeURL, {
-                method: "POST",
-                body: data,
-                headers: { "Accept": "application/json" }
-            });
-
-            if (response.ok) {
-                $("matchOptions").classList.add("hidden");
-                $("thankYouMsg").classList.remove("hidden");
-            } else {
-                $("formMessage").textContent = "Oops! Try messaging on Instagram directly!";
-                submitBtn.disabled = false;
-                submitBtn.textContent = "Send with Love ❤️";
-            }
-        } catch (error) {
-            $("formMessage").textContent = "Network error. Reach out on Instagram instead!";
-            submitBtn.disabled = false;
-            submitBtn.textContent = "Send with Love ❤️";
-        }
-    }
-</script>
-
-</body>
-</html>
+            background: #ffffff;
+            color: #d
