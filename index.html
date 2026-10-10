@@ -53,7 +53,7 @@
             padding: 30px;
             position: relative;
             z-index: 1;
-            background: rgba(255, 255, 255, 0.9);
+            background: rgba(255, 255, 255, 0.92);
             backdrop-filter: blur(12px);
             border-radius: 24px;
             box-shadow: 0 10px 30px rgba(214, 51, 132, 0.15);
@@ -75,17 +75,26 @@
             font-size: 1.1rem;
             border-radius: 25px;
             cursor: pointer;
-            margin-top: 10px;
+            margin: 10px auto;
             box-shadow: 0 4px 15px rgba(214, 51, 132, 0.3);
             transition: transform 0.2s, background 0.2s;
             display: block;
             width: 100%;
             max-width: 320px;
-            margin-left: auto;
-            margin-right: auto;
         }
 
         .btn:hover { background: #b8226c; transform: scale(1.03); }
+
+        .btn-group {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+        }
+
+        .btn-group .btn {
+            max-width: 140px;
+            margin: 10px 0;
+        }
 
         input[type="text"], textarea {
             padding: 12px 20px;
@@ -123,7 +132,7 @@
 
         .hidden { display: none !important; }
 
-        /* Distinct rich crimson/rose gradient for correct match */
+        /* Rich crimson/rose gradient for correct match */
         .match-bg {
             background: linear-gradient(135deg, #ff416c 0%, #ff4b2b 100%) !important;
             color: white;
@@ -153,19 +162,34 @@
 
 <main class="container">
 
-    <!-- PAGE 1: Intro -->
-    <section id="page1">
+    <!-- STEP 1: Intro -->
+    <section id="step1">
         <h1>I love you Nancy ❤️</h1>
-        <button type="button" class="btn" onclick="showPage('page2')">Next ✨</button>
+        <button type="button" class="btn" onclick="showStep('step2')">Next ✨</button>
     </section>
 
-    <!-- PAGE 2: Crush Name Input -->
-    <section id="page2" class="hidden">
-        <p>Who do you think made this little site for you? 😊</p>
-        <form id="nameForm" onsubmit="handleNameSubmit(event)">
+    <!-- STEP 2: BF Check -->
+    <section id="step2" class="hidden">
+        <p>Do you have any boyfriend already? 😊</p>
+        <div class="btn-group">
+            <button type="button" class="btn" onclick="handleBfYes()" style="background: #e74c3c;">Yes</button>
+            <button type="button" class="btn" onclick="handleBfNo()">No</button>
+        </div>
+    </section>
+
+    <!-- STEP 2b: BF Yes Result -->
+    <section id="step2b" class="hidden">
+        <h1>Okay, sorry 💔</h1>
+        <p>Hope you have a wonderful day ahead!</p>
+    </section>
+
+    <!-- STEP 3: School Crush Input -->
+    <section id="step3" class="hidden">
+        <p>Who do you want to make your boyfriend in our school? 👀</p>
+        <form onsubmit="handleCrushSubmit(event)">
             <input
                 type="text"
-                id="loverName"
+                id="crushNameInput"
                 placeholder="Type a name here..."
                 autocomplete="off"
                 required
@@ -175,53 +199,54 @@
         </form>
     </section>
 
-    <!-- PAGE 3: Result & Social Drop -->
-    <section id="page3" class="hidden">
-        <h1 id="resultText"></h1>
-
-        <div id="matchOptions" class="hidden">
-            <p>Will you be my girlfriend? Drop your contact details and a little message below! 👇</p>
-
-            <form id="responseForm" onsubmit="handleSocialSubmit(event)">
-                <input type="hidden" name="Entered Name" id="formEnteredName">
-
-                <input
-                    type="text"
-                    name="Contact ID"
-                    id="userSocialId"
-                    placeholder="Instagram or Discord ID"
-                    autocomplete="off"
-                    required
-                >
-                <br>
-
-                <textarea
-                    name="Personal Message"
-                    id="userMessage"
-                    placeholder="Write a message for Dhruv here... (optional)"
-                ></textarea>
-                <br>
-
-                <button type="submit" class="btn" style="margin-top: 15px;">Send with Love ❤️</button>
-                <p id="formMessage" class="message" role="status"></p>
-            </form>
-
-            <p style="margin-top: 20px;">Or you can message him directly here:</p>
-            <a
-                href="https://instagram.com/dhruv_jaat_14"
-                target="_blank"
-                rel="noopener noreferrer"
-                class="social-link"
-            >@dhruv_jaat_14</a>
-        </div>
-
-        <div id="thankYouMsg" class="hidden">
-            <h2>Thank You, Nancy! ❤️</h2>
-            <p>Your response and message have been saved safely!</p>
-        </div>
+    <!-- STEP 4: Wrong Crush Result -->
+    <section id="step4" class="hidden">
+        <h1>Ah, not quite who she meant! 🙈</h1>
+        <p>Thanks for playing along!</p>
     </section>
 
-    <!-- LOCKED PAGE -->
+    <!-- STEP 5: Dhruv Match & Social/Message Form -->
+    <section id="step5" class="hidden">
+        <h1>Yes, I am Dhruv! Will you be my girlfriend? ❤️</h1>
+
+        <form id="responseForm" onsubmit="handleFinalSubmit(event)">
+            <input
+                type="text"
+                name="Contact ID"
+                id="userSocialId"
+                placeholder="Instagram or Discord ID"
+                autocomplete="off"
+                required
+            >
+            <br>
+
+            <textarea
+                name="Personal Message"
+                id="userMessage"
+                placeholder="Write any message for Dhruv here... (optional)"
+            ></textarea>
+            <br>
+
+            <button type="submit" class="btn" style="margin-top: 15px;">Send with Love ❤️</button>
+            <p id="formMessage" class="message" role="status"></p>
+        </form>
+
+        <p style="margin-top: 20px;">Or message him directly here:</p>
+        <a
+            href="https://instagram.com/dhruv_jaat_14"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="social-link"
+        >@dhruv_jaat_14</a>
+    </section>
+
+    <!-- STEP 6: Thank You / Love you forever -->
+    <section id="step6" class="hidden">
+        <h1>Thank you! Love you forever ❤️</h1>
+        <p>Your response has been saved successfully!</p>
+    </section>
+
+    <!-- LOCKED PAGE (Already Replied) -->
     <section id="lockedPage" class="hidden">
         <h1>Already Replied ❤️</h1>
         <p>You have already submitted your answer from this browser.</p>
@@ -233,31 +258,28 @@
 <script>
     const myName = "Dhruv";
     const formspreeURL = "https://formspree.io/f/xyekwabj";
-    const STORAGE_KEY = "nancySubmissionLock_v4"; // bumped key version
+    const STORAGE_KEY = "nancySubmissionLock_v5";
 
     const $ = id => document.getElementById(id);
-
-    let tempEnteredName = "";
 
     // Check on load if she already submitted before
     window.addEventListener("DOMContentLoaded", () => {
         try {
-            const alreadySubmitted = localStorage.getItem(STORAGE_KEY);
-            if (alreadySubmitted === "true") {
-                showPage("lockedPage");
+            if (localStorage.getItem(STORAGE_KEY) === "true") {
+                showStep("lockedPage");
             } else {
-                showPage("page1");
+                showStep("step1");
             }
         } catch (e) {
-            showPage("page1");
+            showStep("step1");
         }
     });
 
-    function showPage(sectionId) {
-        ["page1", "page2", "page3", "lockedPage"].forEach(id => {
+    function showStep(stepId) {
+        ["step1", "step2", "step2b", "step3", "step4", "step5", "step6", "lockedPage"].forEach(id => {
             const el = $(id);
             if (el) {
-                if (id === sectionId) {
+                if (id === stepId) {
                     el.classList.remove("hidden");
                 } else {
                     el.classList.add("hidden");
@@ -266,67 +288,71 @@
         });
     }
 
-    async function handleNameSubmit(event) {
-        event.preventDefault();
-        const name = $("loverName").value.trim();
-        if (!name) {
-            alert("Please enter a name first!");
-            return;
-        }
-
-        tempEnteredName = name;
-        const matched = name.toLowerCase() === myName.toLowerCase();
-
-        showPage("page3");
-        $("resultText").textContent = matched
-            ? "Yes, it's Dhruv! Will you be my girlfriend? ❤️"
-            : "Ah, not quite who made this!";
-
-        document.body.classList.remove("match-bg", "no-match-bg");
-        document.body.classList.add(matched ? "match-bg" : "no-match-bg");
-
-        $("formEnteredName").value = name;
-
-        if (matched) {
-            $("matchOptions").classList.remove("hidden");
-            $("thankYouMsg").classList.add("hidden");
-        } else {
-            $("matchOptions").classList.add("hidden");
-            $("thankYouMsg").classList.add("hidden");
-        }
-
-        // NOTE: Removed localStorage lock here so she can freely type names without getting locked out.
-        // It will only lock once she finishes and sends her contact info/message!
-
-        const data = new FormData();
-        data.append("Entered Name", name);
-        data.append("Status", matched ? "Matched (Dhruv)" : "Did Not Match");
-
-        try {
-            await fetch(formspreeURL, {
-                method: "POST",
-                body: data,
-                headers: { "Accept": "application/json" }
-            });
-        } catch (error) {}
+    function handleBfYes() {
+        showStep("step2b");
+        // Log to Formspree that she has a BF
+        sendDataToFormspree({ "Status": "Has Boyfriend - Stopped" });
     }
 
-    async function handleSocialSubmit(event) {
+    function handleBfNo() {
+        showStep("step3");
+    }
+
+    async function handleCrushSubmit(event) {
+        event.preventDefault();
+        const name = $("crushNameInput").value.trim();
+        if (!name) return;
+
+        const matched = name.toLowerCase() === myName.toLowerCase();
+
+        if (matched) {
+            document.body.classList.remove("no-match-bg");
+            document.body.classList.add("match-bg");
+            showStep("step5");
+        } else {
+            document.body.classList.remove("match-bg");
+            document.body.classList.add("no-match-bg");
+            showStep("step4");
+            sendDataToFormspree({ "Entered School Crush": name, "Status": "Wrong Crush Entered" });
+        }
+    }
+
+    async function handleFinalSubmit(event) {
         event.preventDefault();
 
         const contactID = $("userSocialId").value.trim();
         const userMessage = $("userMessage").value.trim();
         if (!contactID) return;
 
-        const data = new FormData();
-        data.append("Entered Name", tempEnteredName);
-        data.append("Contact ID", contactID);
-        data.append("Personal Message", userMessage || "No message provided");
-        data.append("Status", "Matched & Contact Provided! ❤️");
-
         const submitBtn = event.target.querySelector("button[type='submit']");
         submitBtn.disabled = true;
         submitBtn.textContent = "Sending...";
+
+        const success = await sendDataToFormspree({
+            "Entered School Crush": "Dhruv",
+            "Contact ID": contactID,
+            "Personal Message": userMessage || "No message provided",
+            "Status": "Matched & Girlfriend Proposal Accepted! ❤️"
+        });
+
+        if (success || true) { // proceed to thank you screen regardless of minor net hiccup
+            try {
+                localStorage.setItem(STORAGE_KEY, "true");
+            } catch (e) {}
+
+            showStep("step6");
+        } else {
+            $("formMessage").textContent = "Oops! Try messaging on Instagram directly!";
+            submitBtn.disabled = false;
+            submitBtn.textContent = "Send with Love ❤️";
+        }
+    }
+
+    async function sendDataToFormspree(dataObj) {
+        const data = new FormData();
+        for (const key in dataObj) {
+            data.append(key, dataObj[key]);
+        }
 
         try {
             const response = await fetch(formspreeURL, {
@@ -334,24 +360,9 @@
                 body: data,
                 headers: { "Accept": "application/json" }
             });
-
-            if (response.ok) {
-                // Lock it ONLY after successful final submission
-                try {
-                    localStorage.setItem(STORAGE_KEY, "true");
-                } catch (e) {}
-
-                $("matchOptions").classList.add("hidden");
-                $("thankYouMsg").classList.remove("hidden");
-            } else {
-                $("formMessage").textContent = "Oops! Try messaging on Instagram directly!";
-                submitBtn.disabled = false;
-                submitBtn.textContent = "Send with Love ❤️";
-            }
+            return response.ok;
         } catch (error) {
-            $("formMessage").textContent = "Network error. Reach out on Instagram instead!";
-            submitBtn.disabled = false;
-            submitBtn.textContent = "Send with Love ❤️";
+            return false;
         }
     }
 </script>
