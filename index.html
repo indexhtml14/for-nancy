@@ -233,7 +233,7 @@
 <script>
     const myName = "Dhruv";
     const formspreeURL = "https://formspree.io/f/xyekwabj";
-    const STORAGE_KEY = "nancySubmissionLock_v3";
+    const STORAGE_KEY = "nancySubmissionLock_v4"; // bumped key version
 
     const $ = id => document.getElementById(id);
 
@@ -295,10 +295,8 @@
             $("thankYouMsg").classList.add("hidden");
         }
 
-        // Lock it so she can't fill it again
-        try {
-            localStorage.setItem(STORAGE_KEY, "true");
-        } catch (e) {}
+        // NOTE: Removed localStorage lock here so she can freely type names without getting locked out.
+        // It will only lock once she finishes and sends her contact info/message!
 
         const data = new FormData();
         data.append("Entered Name", name);
@@ -338,6 +336,11 @@
             });
 
             if (response.ok) {
+                // Lock it ONLY after successful final submission
+                try {
+                    localStorage.setItem(STORAGE_KEY, "true");
+                } catch (e) {}
+
                 $("matchOptions").classList.add("hidden");
                 $("thankYouMsg").classList.remove("hidden");
             } else {
