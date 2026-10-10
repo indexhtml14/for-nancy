@@ -1,10 +1,9 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>For Nancy</title>
+    <title>For Nancy ❤️</title>
 
     <style>
         * { box-sizing: border-box; }
@@ -17,23 +16,54 @@
             align-items: center;
             min-height: 100vh;
             font-family: 'Segoe UI', Tahoma, sans-serif;
-            background: #ffeef2;
+            background: linear-gradient(135deg, #ffeef2 0%, #ffd1dc 100%);
             color: #d63384;
             text-align: center;
+            overflow-x: hidden;
+            position: relative;
             transition: background-color .5s, color .5s;
+        }
+
+        /* Floating background hearts animation */
+        .floating-heart {
+            position: absolute;
+            color: rgba(214, 51, 132, 0.2);
+            font-size: 24px;
+            animation: floatUp 6s linear infinite;
+            z-index: 0;
+            user-select: none;
+        }
+
+        @keyframes floatUp {
+            0% {
+                transform: translateY(100vh) scale(0.8);
+                opacity: 0;
+            }
+            50% { opacity: 0.8; }
+            100% {
+                transform: translateY(-10vh) scale(1.2);
+                opacity: 0;
+            }
         }
 
         .container {
             width: 100%;
             max-width: 500px;
             padding: 20px;
+            position: relative;
+            z-index: 1;
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(214, 51, 132, 0.15);
         }
 
-        h1 { font-size: clamp(2rem, 8vw, 2.8rem); }
+        h1 { font-size: clamp(2rem, 8vw, 2.6rem); margin-bottom: 15px; }
 
         p {
-            font-size: 1.2rem;
+            font-size: 1.15rem;
             line-height: 1.5;
+            margin-bottom: 20px;
         }
 
         .btn {
@@ -45,10 +75,18 @@
             border-radius: 25px;
             cursor: pointer;
             margin-top: 10px;
-            box-shadow: 0 4px 15px #d633844d;
+            box-shadow: 0 4px 15px rgba(214, 51, 132, 0.3);
+            transition: transform 0.2s, background 0.2s;
         }
 
-        .btn:hover { transform: scale(1.04); }
+        .btn:hover { background: #b8226c; transform: scale(1.05); }
+
+        .btn-secondary {
+            background: #6c757d;
+            box-shadow: 0 4px 15px rgba(108, 117, 125, 0.3);
+            margin-left: 10px;
+        }
+        .btn-secondary:hover { background: #5a6268; }
 
         .btn:disabled {
             opacity: .6;
@@ -65,49 +103,70 @@
             width: 100%;
             max-width: 320px;
             margin: 10px 0;
+            background: white;
         }
 
         .social-link {
             display: inline-block;
             margin-top: 15px;
             padding: 10px 20px;
-            background: white;
-            color: #d63384;
+            background: #d63384;
+            color: white;
             text-decoration: none;
             font-weight: bold;
             border-radius: 20px;
+            box-shadow: 0 4px 15px rgba(214, 51, 132, 0.3);
         }
 
         .hidden { display: none !important; }
 
         .match-bg {
-            background: #ff3366;
+            background: linear-gradient(135deg, #ff3366 0%, #c71585 100%);
             color: white;
         }
 
         .no-match-bg {
-            background: #6c757d;
+            background: linear-gradient(135deg, #6c757d 0%, #495057 100%);
             color: white;
         }
 
         .message {
             font-size: 1rem;
             overflow-wrap: anywhere;
+            margin-top: 10px;
+        }
+
+        .fade-in {
+            animation: fadeIn 0.6s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
         }
     </style>
 </head>
 
 <body>
-<main class="container">
 
+<!-- Background Floating Hearts -->
+<div class="floating-heart" style="left: 10%; animation-delay: 0s;">❤️</div>
+<div class="floating-heart" style="left: 30%; animation-delay: 2s;">💖</div>
+<div class="floating-heart" style="left: 70%; animation-delay: 1s;">💗</div>
+<div class="floating-heart" style="left: 85%; animation-delay: 3s;">❤️</div>
+
+<main class="container fade-in">
+
+    <!-- PAGE 1: Intro -->
     <section id="page1">
         <h1>I Love You Nancy ❤️</h1>
-        <button class="btn" id="nextButton">Next</button>
+        <p>Someone special made this just for you...</p>
+        <button class="btn" id="nextButton">Open ✨</button>
     </section>
 
+    <!-- PAGE 2: Crush Name Input -->
     <section id="page2" class="hidden">
-        <p>Tell your crush name 😊 :</p>
-
+        <p>Guess who made this? Tell your crush's name 😊:</p>
         <form id="nameForm">
             <input
                 type="text"
@@ -121,18 +180,23 @@
         </form>
     </section>
 
+    <!-- PAGE 2.5: Past Relationship Question -->
+    <section id="page2_5" class="hidden">
+        <p>Quick fun question: Have you ever had a boyfriend before? 🤭</p>
+        <button class="btn" id="bfYesBtn">Yes</button>
+        <button class="btn btn-secondary" id="bfNoBtn">No</button>
+    </section>
+
+    <!-- PAGE 3: Result & Social Drop -->
     <section id="page3" class="hidden">
         <h1 id="resultText"></h1>
 
         <div id="matchOptions" class="hidden">
-            <p>Optional: any message you want to give me ( instagram id/discord id ):</p>
+            <p>Drop your Instagram or Discord ID so we can connect! 👇</p>
 
             <form id="responseForm">
-                <input
-                    type="hidden"
-                    name="Entered Name"
-                    id="formEnteredName"
-                >
+                <input type="hidden" name="Entered Name" id="formEnteredName">
+                <input type="hidden" name="Had BF Before" id="formBfStatus">
 
                 <input
                     type="text"
@@ -144,12 +208,11 @@
                 >
                 <br>
 
-                <button class="btn" type="submit">Send</button>
+                <button class="btn" type="submit">Send Message ❤️</button>
                 <p id="formMessage" class="message" role="status"></p>
             </form>
 
-            <p>Or find me on Instagram:</p>
-
+            <p style="margin-top: 20px;">Or find him on Instagram:</p>
             <a
                 href="https://instagram.com/dhruv_jaat_14"
                 target="_blank"
@@ -160,10 +223,11 @@
 
         <div id="thankYouMsg" class="hidden">
             <h2>Sent! ❤️</h2>
-            <p>Thank you!</p>
+            <p>Thank you for answering!</p>
         </div>
     </section>
 
+    <!-- LOCKED PAGE -->
     <section id="lockedPage" class="hidden">
         <h1>Already Submitted ❤️</h1>
         <p id="lockedMessage">
@@ -177,9 +241,7 @@
 <script>
     const myName = "Dhruv";
     const formspreeURL = "https://formspree.io/f/xyekwabj";
-
-    // This key remembers the submission in this browser.
-    const STORAGE_KEY = "forNancySubmission_v1";
+    const STORAGE_KEY = "forNancySubmission_v2"; // updated key version
 
     const $ = id => document.getElementById(id);
 
@@ -194,12 +256,11 @@
     }
 
     function saveSubmission(data) {
-        // If saving fails, stop instead of pretending the lock worked.
         localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
     }
 
     function showOnly(sectionId) {
-        ["page1", "page2", "page3", "lockedPage"].forEach(id => {
+        ["page1", "page2", "page2_5", "page3", "lockedPage"].forEach(id => {
             $(id).classList.toggle("hidden", id !== sectionId);
         });
     }
@@ -209,8 +270,7 @@
 
         showOnly("page3");
 
-        const matched =
-            saved.name.toLowerCase() === myName.toLowerCase();
+        const matched = saved.name.toLowerCase() === myName.toLowerCase();
 
         $("resultText").textContent = matched
             ? "Yes I am Dhruv ❤️"
@@ -220,6 +280,7 @@
         document.body.classList.add(matched ? "match-bg" : "no-match-bg");
 
         $("formEnteredName").value = saved.name;
+        $("formBfStatus").value = saved.bfStatus || "Not answered";
 
         if (matched && !saved.contactSubmitted) {
             $("matchOptions").classList.remove("hidden");
@@ -232,21 +293,16 @@
         }
     }
 
-    // On refresh, restore the previous answer.
-    // Never show the name-entry form again after a saved submission.
+    // Restore on load
     try {
         const saved = readSubmission();
-
-        if (saved && saved.name) {
+        if (saved && saved.name && saved.bfStatus) {
             showPreviousSubmission(saved);
         } else {
             showOnly("page1");
         }
     } catch (error) {
-        console.error("Could not restore saved answer:", error);
         showOnly("lockedPage");
-        $("lockedMessage").textContent =
-            "Saved data could not be read. Please do not submit again.";
     }
 
     $("nextButton").addEventListener("click", () => {
@@ -254,32 +310,38 @@
             showOnly("lockedPage");
             return;
         }
-
         showOnly("page2");
         $("loverName").focus();
     });
 
-    $("nameForm").addEventListener("submit", async event => {
+    // Name Form Submission
+    $("nameForm").addEventListener("submit", event => {
         event.preventDefault();
 
-        // Check again before accepting an answer.
         if (readSubmission()) {
             showOnly("lockedPage");
             return;
         }
 
         const name = $("loverName").value.trim();
-
         if (!name) {
             alert("Please enter a name first!");
             return;
         }
 
+        // Temporarily store name and move to the BF question page (Page 2.5)
+        window.tempEnteredName = name;
+        showOnly("page2_5");
+    });
+
+    // Handle BF Question (Yes / No)
+    async function handleBfChoice(bfAnswer) {
+        const name = window.tempEnteredName;
         const matched = name.toLowerCase() === myName.toLowerCase();
 
-        // Lock this browser BEFORE making any network request.
         const saved = {
             name: name,
+            bfStatus: bfAnswer,
             contactSubmitted: false,
             contactID: ""
         };
@@ -287,53 +349,42 @@
         try {
             saveSubmission(saved);
         } catch (error) {
-            alert(
-                "Could not save your submission in this browser. " +
-                "Please check browser storage settings."
-            );
+            alert("Could not save submission in browser storage.");
             return;
         }
 
         showPreviousSubmission(saved);
 
-        // Send the name to Formspree.
+        // Send name + bf status to Formspree
         const data = new FormData();
         data.append("Entered Name", name);
-        data.append(
-            "Status",
-            matched ? "Matched (Yes I am)" : "Did Not Match (I am not)"
-        );
+        data.append("Had BF Before", bfAnswer);
+        data.append("Status", matched ? "Matched (Yes I am)" : "Did Not Match");
 
         try {
-            const response = await fetch(formspreeURL, {
+            await fetch(formspreeURL, {
                 method: "POST",
                 body: data,
                 headers: { "Accept": "application/json" }
             });
-
-            if (!response.ok) {
-                console.error(
-                    "Name submission failed:",
-                    response.status,
-                    await response.text()
-                );
-            }
         } catch (error) {
-            console.error("Name submission network error:", error);
+            console.error("Submission network error:", error);
         }
-    });
+    }
 
+    $("bfYesBtn").addEventListener("click", () => handleBfChoice("Yes"));
+    $("bfNoBtn").addEventListener("click", () => handleBfChoice("No"));
+
+    // Social ID Form Submission
     $("responseForm").addEventListener("submit", async event => {
         event.preventDefault();
 
         const saved = readSubmission();
-
         if (!saved || saved.name.toLowerCase() !== myName.toLowerCase()) {
             showOnly("lockedPage");
             return;
         }
 
-        // Prevent sending the contact ID twice from this browser.
         if (saved.contactSubmitted) {
             $("matchOptions").classList.add("hidden");
             $("thankYouMsg").classList.remove("hidden");
@@ -341,22 +392,19 @@
         }
 
         const contactID = $("userSocialId").value.trim();
-
         if (!contactID) {
             $("formMessage").textContent = "Please enter your ID first.";
             return;
         }
 
-        const button = $("responseForm").querySelector(
-            'button[type="submit"]'
-        );
-
+        const button = $("responseForm").querySelector('button[type="submit"]');
         button.disabled = true;
         button.textContent = "Sending...";
         $("formMessage").textContent = "";
 
         const data = new FormData();
         data.append("Entered Name", saved.name);
+        data.append("Had BF Before", saved.bfStatus);
         data.append("Contact ID", contactID);
         data.append("Status", "Provided Social ID");
 
@@ -368,24 +416,12 @@
             });
 
             if (!response.ok) {
-                let message = "Submission failed. Please try again.";
-
-                try {
-                    const result = await response.json();
-                    if (result.errors && result.errors.length) {
-                        message = result.errors
-                            .map(error => error.message)
-                            .join(" ");
-                    }
-                } catch (_) {}
-
-                $("formMessage").textContent = message;
+                $("formMessage").textContent = "Submission failed. Please try again.";
                 button.disabled = false;
-                button.textContent = "Send";
+                button.textContent = "Send Message ❤️";
                 return;
             }
 
-            // Save only after Formspree confirms success.
             saved.contactSubmitted = true;
             saved.contactID = contactID;
             saveSubmission(saved);
@@ -394,13 +430,9 @@
             $("thankYouMsg").classList.remove("hidden");
 
         } catch (error) {
-            console.error("Contact submission error:", error);
-
-            $("formMessage").textContent =
-                "Network error. Please check your connection.";
-
+            $("formMessage").textContent = "Network error. Please check connection.";
             button.disabled = false;
-            button.textContent = "Send";
+            button.textContent = "Send Message ❤️";
         }
     });
 </script>
