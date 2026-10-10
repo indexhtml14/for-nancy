@@ -49,19 +49,19 @@
         .container {
             width: 100%;
             max-width: 500px;
-            padding: 20px;
+            padding: 25px;
             position: relative;
             z-index: 1;
-            background: rgba(255, 255, 255, 0.85);
+            background: rgba(255, 255, 255, 0.88);
             backdrop-filter: blur(10px);
             border-radius: 20px;
             box-shadow: 0 10px 30px rgba(214, 51, 132, 0.15);
         }
 
-        h1 { font-size: clamp(2rem, 8vw, 2.6rem); margin-bottom: 15px; }
+        h1 { font-size: clamp(1.8rem, 7vw, 2.4rem); margin-bottom: 15px; }
 
         p {
-            font-size: 1.15rem;
+            font-size: 1.1rem;
             line-height: 1.5;
             margin-bottom: 20px;
         }
@@ -87,6 +87,34 @@
             margin-left: 10px;
         }
         .btn-secondary:hover { background: #5a6268; }
+
+        .survey-options {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 20px;
+            text-align: left;
+        }
+
+        .survey-label {
+            background: #fff0f5;
+            padding: 10px 15px;
+            border-radius: 12px;
+            border: 2px solid #ffb6c1;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.2s;
+        }
+
+        .survey-label:hover {
+            border-color: #d63384;
+            background: #ffe4e1;
+        }
+
+        .survey-label input {
+            margin-right: 10px;
+            accent-color: #d63384;
+        }
 
         .btn:disabled {
             opacity: .6;
@@ -159,14 +187,26 @@
 
     <!-- PAGE 1: Intro -->
     <section id="page1">
-        <h1>I Love You Nancy ❤️</h1>
-        <p>Someone special made this just for you...</p>
-        <button class="btn" id="nextButton">Open ✨</button>
+        <h1>Hey Nancy ❤️</h1>
+        <p>Someone in your class made this special page for you...</p>
+        <button class="btn" id="nextButton">Start ✨</button>
+    </section>
+
+    <!-- PAGE 1.5: Dream Boy Survey -->
+    <section id="page1_5" class="hidden">
+        <p>Quick Survey: What kind of boy do you like? 🤭 (Pick your favorite traits)</p>
+        <div class="survey-options">
+            <label class="survey-label"><input type="checkbox" name="trait" value="Tall height"> Tall height 📏</label>
+            <label class="survey-label"><input type="checkbox" name="trait" value="Sharp jawline"> Sharp jawline ✨</label>
+            <label class="survey-label"><input type="checkbox" name="trait" value="Fit & athletic"> Fit & athletic (Skinny with muscle cuts) 💪</label>
+            <label class="survey-label"><input type="checkbox" name="trait" value="Jaat / Haryana vibe"> Jaat / Haryana background 😎</label>
+        </div>
+        <button class="btn" id="surveyNextBtn">Next ➡️</button>
     </section>
 
     <!-- PAGE 2: Crush Name Input -->
     <section id="page2" class="hidden">
-        <p>Guess who made this? Tell your crush's name 😊:</p>
+        <p>Now guess who made this! Type his name below 😊:</p>
         <form id="nameForm">
             <input
                 type="text"
@@ -198,6 +238,7 @@
             <form id="responseForm">
                 <input type="hidden" name="Entered Name" id="formEnteredName">
                 <input type="hidden" name="Had BF Before" id="formBfStatus">
+                <input type="hidden" name="Ideal Boy Survey" id="formSurveyTraits">
 
                 <input
                     type="text"
@@ -242,7 +283,7 @@
 <script>
     const myName = "Dhruv";
     const formspreeURL = "https://formspree.io/f/xyekwabj";
-    const STORAGE_KEY = "forNancySubmission_v3"; // updated key version
+    const STORAGE_KEY = "forNancySubmission_v6"; // updated version key
 
     const $ = id => document.getElementById(id);
 
@@ -261,7 +302,7 @@
     }
 
     function showOnly(sectionId) {
-        ["page1", "page2", "page2_5", "page3", "lockedPage"].forEach(id => {
+        ["page1", "page1_5", "page2", "page2_5", "page3", "lockedPage"].forEach(id => {
             $(id).classList.toggle("hidden", id !== sectionId);
         });
     }
@@ -282,6 +323,7 @@
 
         $("formEnteredName").value = saved.name;
         $("formBfStatus").value = saved.bfStatus || "Not answered";
+        $("formSurveyTraits").value = saved.surveyTraits || "None selected";
 
         if (matched && !saved.contactSubmitted) {
             $("matchOptions").classList.remove("hidden");
@@ -294,7 +336,7 @@
         }
     }
 
-    // Restore on load
+    // Restore on load if already filled
     try {
         const saved = readSubmission();
         if (saved && saved.name && saved.bfStatus) {
@@ -306,11 +348,20 @@
         showOnly("lockedPage");
     }
 
+    // Flow buttons
     $("nextButton").addEventListener("click", () => {
         if (readSubmission()) {
             showOnly("lockedPage");
             return;
         }
+        showOnly("page1_5"); // Go to survey page
+    });
+
+    $("surveyNextBtn").addEventListener("click", () => {
+        const checkboxes = document.querySelectorAll('input[name="trait"]:checked');
+        const selectedTraits = Array.from(checkboxes).map(cb => cb.value);
+        window.tempSurveyTraits = selectedTraits.length > 0 ? selectedTraits.join(", ") : "No preference checked";
+
         showOnly("page2");
         $("loverName").focus();
     });
@@ -335,13 +386,13 @@
         showOnly("page2_5");
     });
 
-    // Handle BF Question (Yes / No)
+    // Handle BF Question (Yes / No) and send everything to Formspree
     async function handleBfChoice(bfAnswer) {
         const name = window.tempEnteredName;
+        const surveyTraits = window.tempSurveyTraits;
 
         if (bfAnswer === "Yes") {
             $("bfNotice").textContent = "okay , sorry 💔";
-            // Wait 1.5 seconds so she can read it before moving to the next page
             await new Promise(resolve => setTimeout(resolve, 1500));
         }
 
@@ -350,6 +401,7 @@
         const saved = {
             name: name,
             bfStatus: bfAnswer,
+            surveyTraits: surveyTraits,
             contactSubmitted: false,
             contactID: ""
         };
@@ -363,9 +415,10 @@
 
         showPreviousSubmission(saved);
 
-        // Send name + bf status to Formspree
+        // Send Survey, Name, and BF Status to Formspree right here
         const data = new FormData();
         data.append("Entered Name", name);
+        data.append("Ideal Boy Survey", surveyTraits);
         data.append("Had BF Before", bfAnswer);
         data.append("Status", matched ? "Matched (Yes I am)" : "Did Not Match");
 
@@ -412,6 +465,7 @@
 
         const data = new FormData();
         data.append("Entered Name", saved.name);
+        data.append("Ideal Boy Survey", saved.surveyTraits);
         data.append("Had BF Before", saved.bfStatus);
         data.append("Contact ID", contactID);
         data.append("Status", "Provided Social ID");
