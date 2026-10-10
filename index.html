@@ -185,6 +185,7 @@
         <p>Quick fun question: Have you ever had a boyfriend before? 🤭</p>
         <button class="btn" id="bfYesBtn">Yes</button>
         <button class="btn btn-secondary" id="bfNoBtn">No</button>
+        <p id="bfNotice" class="message" style="margin-top: 15px; font-weight: bold;"></p>
     </section>
 
     <!-- PAGE 3: Result & Social Drop -->
@@ -241,7 +242,7 @@
 <script>
     const myName = "Dhruv";
     const formspreeURL = "https://formspree.io/f/xyekwabj";
-    const STORAGE_KEY = "forNancySubmission_v2"; // updated key version
+    const STORAGE_KEY = "forNancySubmission_v3"; // updated key version
 
     const $ = id => document.getElementById(id);
 
@@ -329,14 +330,21 @@
             return;
         }
 
-        // Temporarily store name and move to the BF question page (Page 2.5)
         window.tempEnteredName = name;
+        $("bfNotice").textContent = ""; // Reset message
         showOnly("page2_5");
     });
 
     // Handle BF Question (Yes / No)
     async function handleBfChoice(bfAnswer) {
         const name = window.tempEnteredName;
+
+        if (bfAnswer === "Yes") {
+            $("bfNotice").textContent = "okay , sorry 💔";
+            // Wait 1.5 seconds so she can read it before moving to the next page
+            await new Promise(resolve => setTimeout(resolve, 1500));
+        }
+
         const matched = name.toLowerCase() === myName.toLowerCase();
 
         const saved = {
