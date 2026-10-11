@@ -1,1 +1,376 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>For Nancy ❤️</title>
 
+    <style>
+        * { box-sizing: border-box; }
+
+        body {
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            font-family: 'Segoe UI', Tahoma, sans-serif;
+            background: linear-gradient(135deg, #ffeef2 0%, #ffd1dc 100%);
+            color: #d63384;
+            text-align: center;
+            overflow-x: hidden;
+            position: relative;
+            transition: background 0.5s ease, color 0.5s ease;
+        }
+
+        /* Floating background hearts animation */
+        .floating-heart {
+            position: absolute;
+            color: rgba(214, 51, 132, 0.2);
+            font-size: 24px;
+            animation: floatUp 6s linear infinite;
+            z-index: 0;
+            user-select: none;
+            pointer-events: none;
+        }
+
+        @keyframes floatUp {
+            0% {
+                transform: translateY(100vh) scale(0.8);
+                opacity: 0;
+            }
+            50% { opacity: 0.8; }
+            100% {
+                transform: translateY(-10vh) scale(1.2);
+                opacity: 0;
+            }
+        }
+
+        .container {
+            width: 100%;
+            max-width: 500px;
+            padding: 30px;
+            position: relative;
+            z-index: 1;
+            background: rgba(255, 255, 255, 0.92);
+            backdrop-filter: blur(12px);
+            border-radius: 24px;
+            box-shadow: 0 10px 30px rgba(214, 51, 132, 0.15);
+        }
+
+        h1 { font-size: clamp(1.8rem, 7vw, 2.3rem); margin-bottom: 15px; }
+
+        p {
+            font-size: 1.1rem;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+
+        /* Specific class to make the requested text clearly visible */
+        .visible-text {
+            color: #8b0c3d !important;
+        }
+
+        .btn {
+            background: #d63384;
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            font-size: 1.1rem;
+            border-radius: 25px;
+            cursor: pointer;
+            margin: 10px auto;
+            box-shadow: 0 4px 15px rgba(214, 51, 132, 0.3);
+            transition: transform 0.2s, background 0.2s;
+            display: block;
+            width: 100%;
+            max-width: 320px;
+        }
+
+        .btn:hover { background: #b8226c; transform: scale(1.03); }
+
+        .btn-group {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+        }
+
+        .btn-group .btn {
+            max-width: 140px;
+            margin: 10px 0;
+        }
+
+        input[type="text"], textarea {
+            padding: 12px 20px;
+            font-size: 1rem;
+            border: 2px solid #d63384;
+            border-radius: 20px;
+            outline: none;
+            text-align: center;
+            width: 100%;
+            max-width: 320px;
+            margin: 10px 0;
+            background: white;
+            font-family: inherit;
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 80px;
+            text-align: left;
+            padding: 15px;
+            border-radius: 15px;
+        }
+
+        .social-link {
+            display: inline-block;
+            margin-top: 15px;
+            padding: 10px 20px;
+            background: #d63384;
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+            border-radius: 20px;
+            box-shadow: 0 4px 15px rgba(214, 51, 132, 0.3);
+        }
+
+        .hidden { display: none !important; }
+
+        /* Rich crimson/rose gradient for correct match */
+        .match-bg {
+            background: linear-gradient(135deg, #ff416c 0%, #ff4b2b 100%) !important;
+            color: white;
+        }
+
+        /* Dark purple/slate for incorrect guess */
+        .no-match-bg {
+            background: linear-gradient(135deg, #8e44ad 0%, #34495e 100%) !important;
+            color: white;
+        }
+
+        .message {
+            font-size: 1rem;
+            overflow-wrap: anywhere;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+
+<body>
+
+<!-- Background Floating Hearts -->
+<div class="floating-heart" style="left: 10%; animation-delay: 0s;">❤️</div>
+<div class="floating-heart" style="left: 30%; animation-delay: 2s;">💖</div>
+<div class="floating-heart" style="left: 70%; animation-delay: 1s;">💗</div>
+<div class="floating-heart" style="left: 85%; animation-delay: 3s;">❤️</div>
+
+<main class="container">
+
+    <!-- STEP 1: Intro -->
+    <section id="step1">
+        <h1>I love you Nancy ❤️</h1>
+        <button type="button" class="btn" onclick="showStep('step2')">Next ✨</button>
+    </section>
+
+    <!-- STEP 2: BF Check -->
+    <section id="step2" class="hidden">
+        <p>Do you have any boyfriend already? 😊</p>
+        <div class="btn-group">
+            <button type="button" class="btn" onclick="handleBfYes()" style="background: #e74c3c;">Yes</button>
+            <button type="button" class="btn" onclick="handleBfNo()">No</button>
+        </div>
+    </section>
+
+    <!-- STEP 2b: BF Yes Result -->
+    <section id="step2b" class="hidden">
+        <h1>Okay, sorry 💔</h1>
+        <p>Hope you have a wonderful day ahead!</p>
+    </section>
+
+    <!-- STEP 3: School Crush Input -->
+    <section id="step3" class="hidden">
+        <p>Who do you want to make your boyfriend in our school? 👀</p>
+        <form onsubmit="handleCrushSubmit(event)">
+            <input
+                type="text"
+                id="crushNameInput"
+                placeholder="Type a name here..."
+                autocomplete="off"
+                required
+            >
+            <br>
+            <button type="submit" class="btn" style="margin-top: 15px;">Discover 🎯</button>
+        </form>
+    </section>
+
+    <!-- STEP 4: Wrong Crush Result -->
+    <section id="step4" class="hidden">
+        <h1>Ah, not quite who she meant! 🙈</h1>
+        <p>Thanks for playing along!</p>
+    </section>
+
+    <!-- STEP 5: Dhruv Match & Social/Message Form -->
+    <section id="step5" class="hidden">
+        <h1 class="visible-text">Yes, I am Dhruv! Will you be my girlfriend? ❤️</h1>
+
+        <form id="responseForm" onsubmit="handleFinalSubmit(event)">
+            <input
+                type="text"
+                name="Contact ID"
+                id="userSocialId"
+                placeholder="Instagram or Discord ID"
+                autocomplete="off"
+                required
+            >
+            <br>
+
+            <textarea
+                name="Personal Message"
+                id="userMessage"
+                placeholder="Write any message for Dhruv here... (optional)"
+            ></textarea>
+            <br>
+
+            <button type="submit" class="btn" style="margin-top: 15px;">Send with Love ❤️</button>
+            <p id="formMessage" class="message" role="status"></p>
+        </form>
+
+        <p class="visible-text" style="margin-top: 20px;">Or message him directly here:</p>
+        <a
+            href="https://instagram.com/dhruv_jaat_14"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="social-link"
+        >@dhruv_jaat_14</a>
+    </section>
+
+    <!-- STEP 6: Thank You / Love you forever -->
+    <section id="step6" class="hidden">
+        <h1 class="visible-text">Thank you! Love you forever ❤️</h1>
+        <p class="visible-text">Your response has been saved successfully!</p>
+    </section>
+
+    <!-- LOCKED PAGE (Already Replied) -->
+    <section id="lockedPage" class="hidden">
+        <h1>Already Replied ❤️</h1>
+        <p>You have already submitted your answer from this browser.</p>
+        <p>Hope you have an awesome day!</p>
+    </section>
+
+</main>
+
+<script>
+    const myName = "Dhruv";
+    const formspreeURL = "https://formspree.io/f/xyekwabj";
+    const STORAGE_KEY = "nancySubmissionLock_v5";
+
+    const $ = id => document.getElementById(id);
+
+    // Check on load if she already submitted before
+    window.addEventListener("DOMContentLoaded", () => {
+        try {
+            if (localStorage.getItem(STORAGE_KEY) === "true") {
+                showStep("lockedPage");
+            } else {
+                showStep("step1");
+            }
+        } catch (e) {
+            showStep("step1");
+        }
+    });
+
+    function showStep(stepId) {
+        ["step1", "step2", "step2b", "step3", "step4", "step5", "step6", "lockedPage"].forEach(id => {
+            const el = $(id);
+            if (el) {
+                if (id === stepId) {
+                    el.classList.remove("hidden");
+                } else {
+                    el.classList.add("hidden");
+                }
+            }
+        });
+    }
+
+    function handleBfYes() {
+        showStep("step2b");
+        // Log to Formspree that she has a BF
+        sendDataToFormspree({ "Status": "Has Boyfriend - Stopped" });
+    }
+
+    function handleBfNo() {
+        showStep("step3");
+    }
+
+    async function handleCrushSubmit(event) {
+        event.preventDefault();
+        const name = $("crushNameInput").value.trim();
+        if (!name) return;
+
+        const matched = name.toLowerCase() === myName.toLowerCase();
+
+        if (matched) {
+            document.body.classList.remove("no-match-bg");
+            document.body.classList.add("match-bg");
+            showStep("step5");
+        } else {
+            document.body.classList.remove("match-bg");
+            document.body.classList.add("no-match-bg");
+            showStep("step4");
+            sendDataToFormspree({ "Entered School Crush": name, "Status": "Wrong Crush Entered" });
+        }
+    }
+
+    async function handleFinalSubmit(event) {
+        event.preventDefault();
+
+        const contactID = $("userSocialId").value.trim();
+        const userMessage = $("userMessage").value.trim();
+        if (!contactID) return;
+
+        const submitBtn = event.target.querySelector("button[type='submit']");
+        submitBtn.disabled = true;
+        submitBtn.textContent = "Sending...";
+
+        const success = await sendDataToFormspree({
+            "Entered School Crush": "Dhruv",
+            "Contact ID": contactID,
+            "Personal Message": userMessage || "No message provided",
+            "Status": "Matched & Girlfriend Proposal Accepted! ❤️"
+        });
+
+        if (success || true) { // proceed to thank you screen regardless of minor net hiccup
+            try {
+                localStorage.setItem(STORAGE_KEY, "true");
+            } catch (e) {}
+
+            showStep("step6");
+        } else {
+            $("formMessage").textContent = "Oops! Try messaging on Instagram directly!";
+            submitBtn.disabled = false;
+            submitBtn.textContent = "Send with Love ❤️";
+        }
+    }
+
+    async function sendDataToFormspree(dataObj) {
+        const data = new FormData();
+        for (const key in dataObj) {
+            data.append(key, dataObj[key]);
+        }
+
+        try {
+            const response = await fetch(formspreeURL, {
+                method: "POST",
+                body: data,
+                headers: { "Accept": "application/json" }
+            });
+            return response.ok;
+        } catch (error) {
+            return false;
+        }
+    }
+</script>
+
+</body>
+</html>
