@@ -263,14 +263,39 @@
 <script>
     const myName = "Dhruv";
     const formspreeURL = "https://formspree.io/f/xyekwabj";
-    const STORAGE_KEY = "nancySubmissionLock_v5";
+    const STORAGE_KEY = "nancySubmissionLock_v7";
 
     const $ = id => document.getElementById(id);
 
-    // Check on load if she already submitted before
-    window.addEventListener("DOMContentLoaded", () => {
+    // Helper to check if browser is in Incognito / Private mode
+    async function checkIncognito() {
+        return new Promise(resolve => {
+            try {
+                // Feature detection for storage quotas (works on Chrome/Edge/Firefox)
+                if ('storage' in navigator && 'estimate' in navigator.storage) {
+                    navigator.storage.estimate().then(estimate => {
+                        // Incognito storage quotas are usually much lower (under 120MB approx)
+                        if (estimate.quota < 120 * 1024 * 1024) {
+                            resolve(true);
+                        } else {
+                            resolve(false);
+                        }
+                    }).catch(() => resolve(false));
+                } else {
+                    resolve(false);
+                }
+            } catch (e) {
+                resolve(false);
+            }
+        });
+    }
+
+    // Check on load
+    window.addEventListener("DOMContentLoaded", async () => {
         try {
-            if (localStorage.getItem(STORAGE_KEY) === "true") {
+            const isIncognito = await checkIncognito();
+            // If it's NOT incognito, check the localStorage lock normally
+            if (!isIncognito && localStorage.getItem(STORAGE_KEY) === "true") {
                 showStep("lockedPage");
             } else {
                 showStep("step1");
@@ -295,7 +320,6 @@
 
     function handleBfYes() {
         showStep("step2b");
-        // Log to Formspree that she has a BF
         sendDataToFormspree({ "Status": "Has Boyfriend - Stopped" });
     }
 
@@ -340,7 +364,7 @@
             "Status": "Matched & Girlfriend Proposal Accepted! ❤️"
         });
 
-        if (success || true) { // proceed to thank you screen regardless of minor net hiccup
+        if (success || true) {
             try {
                 localStorage.setItem(STORAGE_KEY, "true");
             } catch (e) {}
